@@ -32,7 +32,7 @@ class ITTAKESTOQUE_API ALevelCamera : public ACameraActor
 		float FollowSpeed = 5.0f;
 
 		UPROPERTY(EditAnywhere);
-		FVector CameraOffset = FVector(-1500.0f, 0.0f, 800.0f);
+		FVector CameraOffset = FVector(-1000.0f, 0.0f, 800.0f);
 
 		UPROPERTY(EditAnywhere);
 		ACharacter* Player1;
