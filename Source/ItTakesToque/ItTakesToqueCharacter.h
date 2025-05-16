@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "CharacterSwitcher.h"
 #include "ItTakesToqueCharacter.generated.h"
 
 class USpringArmComponent;
@@ -68,5 +69,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	ECharacterType CharacterType = ECharacterType::NONE;
 };
 
