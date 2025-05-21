@@ -37,6 +37,18 @@ class AItTakesToqueCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
 
+	/** Dash Action **/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DashAction;
+
+	/** Interact Action **/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
+	/** Cancel Action **/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CancelAction;
+
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
@@ -44,6 +56,16 @@ class AItTakesToqueCharacter : public ACharacter
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))              
+	UInputAction* Skill1Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* Skill2Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* Skill3Action;
+
 
 public:
 	AItTakesToqueCharacter();
@@ -57,7 +79,14 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 			
-
+	/** Called for Jump input */
+	void Dash();
+	void StopDash();
+	void Interact();
+	void Cancel();
+	void Skill1();
+	void Skill2();
+	void Skill3();
 protected:
 
 	virtual void NotifyControllerChanged() override;
@@ -72,5 +101,9 @@ public:
 
 public:
 	ECharacterType CharacterType = ECharacterType::NONE;
+
+	/** Ability System Component **/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
+	class UMy2AbilitySystemComponent* AbilitySystemComponent;
 };
 
