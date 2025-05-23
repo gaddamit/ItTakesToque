@@ -6,22 +6,12 @@
 #include "CollectibleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Animation/AnimInstance.h"
+#include "Constants.h"
 #include "CharacterSwitcher.generated.h"
 
 /**
  * 
  */
-
-UENUM(BlueprintType)
-enum class ECharacterType : uint8
-{
-	NONE		UMETA(DisplayName = "None"),
-    KNIGHT      UMETA(DisplayName = "Knight"),
-    BARBARIAN	UMETA(DisplayName = "Barabarian"),
-    ROGUE		UMETA(DisplayName = "Rogue"),
-	MAGE		UMETA(DisplayName = "Mage"),
-};
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ITTAKESTOQUE_API UCharacterSwitcher : public UCollectibleComponent
