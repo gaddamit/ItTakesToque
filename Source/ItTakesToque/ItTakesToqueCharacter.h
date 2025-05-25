@@ -6,12 +6,15 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "CharacterSwitcher.h"
+#include "Constants.h"
+#include "Components/CharacterAbilities.h"
 #include "ItTakesToqueCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UEnhancedInputComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -33,65 +36,31 @@ class AItTakesToqueCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
-	/** Dash Action **/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* DashAction;
-
-	/** Interact Action **/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* InteractAction;
-
-	/** Cancel Action **/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* CancelAction;
-
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
-
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))              
-	UInputAction* Skill1Action;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* Skill2Action;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* Skill3Action;
-
-
+private:
+	UEnhancedInputComponent* InputComponent;
 public:
 	AItTakesToqueCharacter();
-	
+	/** Returns the current character's ability system component. */
+	virtual class UMy2AbilitySystemComponent* GetAbilitySystemComponent() const;
 
+	virtual class UCharacterAbilities* GetCharacterAbilities() const;
 protected:
-
+	void BeginPlay();
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
-	/** Called for Jump input */
-	void Dash();
-	void StopDash();
-	void Interact();
-	void Cancel();
-	void Skill1();
-	void Skill2();
-	void Skill3();
-protected:
 
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	void BindAbilities();
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -104,6 +73,9 @@ public:
 
 	/** Ability System Component **/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
-	class UMy2AbilitySystemComponent* AbilitySystemComponent;
+    TObjectPtr<UMy2AbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
+	TObjectPtr<UCharacterAbilities> CharacterAbilities;
 };
 

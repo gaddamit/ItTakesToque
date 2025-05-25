@@ -11,7 +11,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Components/My2AbilitySystemComponent.h"
-#include "Abilities/GA_Fireball.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -40,16 +39,50 @@ AItTakesToqueCharacter::AItTakesToqueCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-
-	//Initialize the Ability System Component
-	AbilitySystemComponent = CreateDefaultSubobject<UMy2AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
+
+UMy2AbilitySystemComponent* AItTakesToqueCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+UCharacterAbilities* AItTakesToqueCharacter::GetCharacterAbilities() const
+{
+	return CharacterAbilities;
+}
+
+void AItTakesToqueCharacter::BeginPlay()
+{
+	// Call the base class  
+	Super::BeginPlay();
+}
+
+void AItTakesToqueCharacter::BindAbilities()
+{
+	UE_LOG(LogTemplateCharacter, Log, TEXT("Binding abilities for %s"), *GetNameSafe(this));
+	if(AbilitySystemComponent && CharacterAbilities)
+	{
+		TMap<TObjectPtr<UInputAction>, TSubclassOf<UGameplayAbility>>& Abilities = CharacterAbilities->Abilities;
+		// Iterate through the map and bind each ability to the corresponding input action
+		for (const TPair<TObjectPtr<UInputAction>, TSubclassOf<UGameplayAbility>>& Pair : Abilities)
+		{
+			TObjectPtr<UInputAction> InputAction = Pair.Key;
+			TSubclassOf<UGameplayAbility> Ability = Pair.Value;
+
+			if (InputAction && Ability)
+			{
+				// Save handle from give ability
+				FGameplayAbilitySpecHandle AbilityHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, 1, static_cast<int32>(EAbilityInputID::None), this));
+				AbilitySystemComponent->SetInputBinding(InputAction, AbilityHandle);
+			}
+			else
+			{
+				UE_LOG(LogTemplateCharacter, Warning, TEXT("Invalid Input Action or Ability for %s"), *GetNameSafe(this));
+			}
+		}
+	}
+}
 
 void AItTakesToqueCharacter::NotifyControllerChanged()
 {
@@ -67,62 +100,41 @@ void AItTakesToqueCharacter::NotifyControllerChanged()
 
 void AItTakesToqueCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		// Dash
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Dash);
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AItTakesToqueCharacter::StopDash);
-
-		// Interact
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Interact);
-
-		// Cancel
-		EnhancedInputComponent->BindAction(CancelAction, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Cancel);
-
+	InputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (InputComponent) {
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AItTakesToqueCharacter::Move);
+		InputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AItTakesToqueCharacter::Move);
+		
+		UObject* ASC = FindComponentByClass<UMy2AbilitySystemComponent>();
+		if(ASC)
+		{
+			AbilitySystemComponent = Cast<UMy2AbilitySystemComponent>(ASC);
+			AbilitySystemComponent->InitAbilityActorInfo(this, this);
+			AbilitySystemComponent->SetInputComponent(InputComponent);
+		}
+		else
+		{
+			UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find an Ability System Component!"));
+		}
 
-		// Looking
-		//EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AItTakesToqueCharacter::Look);
+		UObject* Abilities = FindComponentByClass<UCharacterAbilities>();
+		if (Abilities)
+		{
+			CharacterAbilities = Cast<UCharacterAbilities>(Abilities);
+		}
+		else
+		{
+			UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find a Character Abilities component!"));
+		}
 
-		// Skills
-		EnhancedInputComponent->BindAction(Skill1Action, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Skill1);
-		EnhancedInputComponent->BindAction(Skill2Action, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Skill2);
-		EnhancedInputComponent->BindAction(Skill3Action, ETriggerEvent::Started, this, &AItTakesToqueCharacter::Skill3);
+		BindAbilities();
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
-}
-
-void AItTakesToqueCharacter::Dash()
-{
-	// Implement dash logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Dash pressed"));
-}
-
-void AItTakesToqueCharacter::StopDash()
-{
-	// Implement stop dash logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Dash released"));
-}
-
-void AItTakesToqueCharacter::Interact()
-{
-	// Implement interact logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Interact pressed"));
-}
-
-void AItTakesToqueCharacter::Cancel()
-{
-	// Implement cancel logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Cancel pressed"));
 }
 
 void AItTakesToqueCharacter::Move(const FInputActionValue& Value)
@@ -159,20 +171,4 @@ void AItTakesToqueCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
-}
-
-void AItTakesToqueCharacter::Skill1()
-{
-	// Implement skill 1 logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Skill 1 pressed"));
-}
-void AItTakesToqueCharacter::Skill2()
-{
-	// Implement skill 2 logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Skill 2 pressed"));
-}
-void AItTakesToqueCharacter::Skill3()
-{
-	// Implement skill 3 logic here
-	UE_LOG(LogTemplateCharacter, Log, TEXT("Skill 3 pressed"));
 }
