@@ -39,19 +39,20 @@ void UMy2AbilitySystemComponent::SetInputBinding(UInputAction* InputAction, FGam
 	if (BindingAbility && BindingAbility->InputID != InvalidInputID)
 	{
 		// This ability is already bound to an input action
-		return;
+		UE_LOG(LogTemp, Warning, TEXT("Ability is already bound to an input action"));
+		//return;
 	}
 	if (!BindingAbility)
 	{
 		// This ability is not valid
-		//UE_LOG(LogTemp, Warning, TEXT("Binding ability is not valid"));
+		UE_LOG(LogTemp, Warning, TEXT("Binding ability is not valid"));
 		return;
 	}
 
 	FAbilityInputBinding* AbilityInputBinding = MappedAbilities.Find(InputAction);
 	if (AbilityInputBinding)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Updating input binding for %s"), *GetNameSafe(InputAction));
+		UE_LOG(LogTemp, Warning, TEXT("Updating input binding for %s"), *GetNameSafe(InputAction));
 		FGameplayAbilitySpec* OldBoundAbility = FindAbilitySpec(AbilityInputBinding->BoundAbilitiesStack.Top());
 		if (OldBoundAbility && OldBoundAbility->InputID == AbilityInputBinding->InputID)
 		{
@@ -60,7 +61,7 @@ void UMy2AbilitySystemComponent::SetInputBinding(UInputAction* InputAction, FGam
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Creating new input binding for %s"), *GetNameSafe(InputAction));
+		UE_LOG(LogTemp, Warning, TEXT("Creating new input binding for %s"), *GetNameSafe(InputAction));
 		AbilityInputBinding = &MappedAbilities.Add(InputAction);
 		AbilityInputBinding->InputID = GetNextInputID();
 	}

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../CollectibleComponent.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/Character.h"
 #include "CharacterAbilities.generated.h"
@@ -10,14 +11,14 @@
 class UInputAction;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ITTAKESTOQUE_API UCharacterAbilities : public UActorComponent
+class ITTAKESTOQUE_API UCharacterAbilities : public UCollectibleComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
 	UCharacterAbilities();
-
+	virtual void OnCollect(AActor* Collector) override;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
