@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Abilities/GameplayAbility.h"
+#include "GA_BasicProjectile.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class ITTAKESTOQUE_API UGA_BasicProjectile : public UGameplayAbility
+{
+	GENERATED_BODY()
+public:
+	UGA_BasicProjectile();
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	TSubclassOf<class AActor> ProjectileClass; // The class of the projectile to spawn
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	float ProjectileSpeed = 3000.0f; // Speed of the projectile
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	float ProjectileLifetime = 5.0f; // Lifetime of the projectile in seconds
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
+    void OnAbilityActivated();
+};
