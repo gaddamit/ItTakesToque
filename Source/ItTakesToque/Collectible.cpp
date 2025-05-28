@@ -3,7 +3,7 @@
 
 #include "Collectible.h"
 #include "Components/StaticMeshComponent.h"
-#include "CollectibleComponent.h"
+#include "Components/CollectibleComponent.h"
 
 // Sets default values
 ACollectible::ACollectible()
