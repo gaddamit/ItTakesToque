@@ -39,7 +39,6 @@ void UCharacterAbilities::OnCollect(AActor* Collector)
     Super::OnCollect(Collector);
     // Implement the logic for switching characters
     // For example, you might want to change the player's character or update the game state
-    UE_LOG(LogTemp, Warning, TEXT("Abilities switched by %s"), *Collector->GetName());
 
 	AItTakesToqueCharacter* PlayerCharacter = Cast<AItTakesToqueCharacter>(Collector);
     if(!PlayerCharacter)
@@ -47,6 +46,12 @@ void UCharacterAbilities::OnCollect(AActor* Collector)
 		UE_LOG(LogTemp, Warning, TEXT("Collector is not a valid player character"));
 		return;
 	}
+
+	if(PlayerCharacter->CharacterType == ECharacterType::UNDEAD)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Not switching to %s"), *UEnum::GetValueAsString(PlayerCharacter->CharacterType));
+        return;
+    }
 
 	UMy2AbilitySystemComponent* ASC = PlayerCharacter->GetAbilitySystemComponent();
 	if(!ASC)

@@ -6,6 +6,7 @@
 #include "../CollectibleComponent.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/Character.h"
+#include "../Constants.h"
 #include "CharacterAbilities.generated.h"
 
 class UInputAction;
@@ -26,6 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	ECharacterType CharacterType = ECharacterType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TMap<TObjectPtr<UInputAction>, TSubclassOf<class UGameplayAbility>> Abilities;

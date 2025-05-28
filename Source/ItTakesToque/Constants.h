@@ -9,6 +9,7 @@ enum class ECharacterType : uint8
     BARBARIAN	UMETA(DisplayName = "Barabarian"),
     ROGUE		UMETA(DisplayName = "Rogue"),
 	MAGE		UMETA(DisplayName = "Mage"),
+    UNDEAD      UMETA(DisplayName = "Undead"),
 };
 
 UENUM(BlueprintType)
