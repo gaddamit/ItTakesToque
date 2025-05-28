@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "CharacterSwitcher.h"
 #include "Constants.h"
+#include "Components/CharacterSwitcher.h"
 #include "Components/CharacterAbilities.h"
 #include "ItTakesToqueCharacter.generated.h"
 
@@ -69,7 +69,8 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 public:
-	ECharacterType CharacterType = ECharacterType::NONE;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	ECharacterType CharacterType = ECharacterType::KNIGHT;
 
 	/** Ability System Component **/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")

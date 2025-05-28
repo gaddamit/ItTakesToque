@@ -6,7 +6,7 @@
 #include "CollectibleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Animation/AnimInstance.h"
-#include "Constants.h"
+#include "../Constants.h"
 #include "CharacterSwitcher.generated.h"
 
 /**
@@ -20,8 +20,8 @@ class ITTAKESTOQUE_API UCharacterSwitcher : public UCollectibleComponent
 	public:
 	virtual void OnCollect(AActor* Collector) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-	ECharacterType CharacterType = ECharacterType::NONE;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	//ECharacterType CharacterType = ECharacterType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	USkeletalMesh* SkeletalMeshAsset = nullptr;

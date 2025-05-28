@@ -47,11 +47,11 @@ void UCharacterAbilities::OnCollect(AActor* Collector)
 		return;
 	}
 
-	if(PlayerCharacter->CharacterType == ECharacterType::UNDEAD)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Not switching to %s"), *UEnum::GetValueAsString(PlayerCharacter->CharacterType));
-        return;
-    }
+	// if(PlayerCharacter->CharacterType == ECharacterType::UNDEAD)
+    // {
+    //     UE_LOG(LogTemp, Warning, TEXT("Not switching to %s"), *UEnum::GetValueAsString(PlayerCharacter->CharacterType));
+    //     return;
+    // }
 
 	UMy2AbilitySystemComponent* ASC = PlayerCharacter->GetAbilitySystemComponent();
 	if(!ASC)
