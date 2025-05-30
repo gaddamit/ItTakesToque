@@ -26,7 +26,13 @@ class ITTAKESTOQUE_API ALevelCamera : public ACameraActor
 		float CameraHeight = 800.0f;
 
 		UPROPERTY(EditAnywhere);
-		float CameraZoomMultiplier = 0.5f;
+		float CameraZoomXMultiplier = 1.5f;
+		UPROPERTY(EditAnywhere);
+		float CameraZoomZMultiplier = 1.5f;
+
+
+		UPROPERTY(EditAnywhere);
+		float MinDistanceToAdjust = 1000.0f;
 
 		UPROPERTY(EditAnywhere);
 		float FollowSpeed = 5.0f;

@@ -62,7 +62,12 @@ void ALevelCamera::Tick(float DeltaTime)
     FVector MidPoint = (Player1Location + Player2Location) / 2.0f;
     float Distance = FVector::Distance(Player1Location, Player2Location);
 
-    FVector NewCameraLocation = MidPoint + FVector(CameraOffset.X, CameraOffset.Y, CameraOffset.Z + (Distance * CameraZoomMultiplier));
+    if(Distance < MinDistanceToAdjust)
+    {
+        Distance = MinDistanceToAdjust;
+    }
+
+    FVector NewCameraLocation = MidPoint + FVector(CameraOffset.X - Distance * CameraZoomXMultiplier, CameraOffset.Y, CameraOffset.Z + Distance * CameraZoomZMultiplier);// + (Distance * CameraZoomMultiplier));
     FVector SmootherCameraLocation = FMath::VInterpTo(GetActorLocation(), NewCameraLocation, DeltaTime, FollowSpeed);
     SetActorLocation(SmootherCameraLocation);
 }
