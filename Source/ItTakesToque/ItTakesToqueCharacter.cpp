@@ -52,10 +52,17 @@ UCharacterAbilities* AItTakesToqueCharacter::GetCharacterAbilities() const
 	return CharacterAbilities;
 }
 
+UCharacterWeapons* AItTakesToqueCharacter::GetCharacterWeapons() const
+{
+	return CharacterWeapons;
+}
+
 void AItTakesToqueCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	CharacterWeapons = FindComponentByClass<UCharacterWeapons>();
 }
 
 void AItTakesToqueCharacter::BindAbilities()
@@ -170,5 +177,17 @@ void AItTakesToqueCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AItTakesToqueCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	if(AbilitySystemComponent)
+	{
+		AbilitySystemComponent->GetOwnedGameplayTags(TagContainer);
+	}
+	else
+	{
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("AbilitySystemComponent is null in %s"), *GetNameSafe(this));	
 	}
 }

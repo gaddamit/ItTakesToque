@@ -8,6 +8,9 @@
 #include "Constants.h"
 #include "Components/CharacterSwitcher.h"
 #include "Components/CharacterAbilities.h"
+#include "Components/CharacterWeapons.h"
+#include "WeaponInterface.h"
+#include "GameplayTagAssetInterface.h"
 #include "ItTakesToqueCharacter.generated.h"
 
 class USpringArmComponent;
@@ -20,7 +23,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AItTakesToqueCharacter : public ACharacter
+class AItTakesToqueCharacter : public ACharacter, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -47,10 +50,12 @@ public:
 	virtual class UMy2AbilitySystemComponent* GetAbilitySystemComponent() const;
 
 	virtual class UCharacterAbilities* GetCharacterAbilities() const;
+
+	virtual class UCharacterWeapons* GetCharacterWeapons() const;
 protected:
 	void BeginPlay();
 	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
+	void Move(const FInputActionValue& Value);	
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
@@ -59,6 +64,7 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 private:
 	void BindAbilities();
 
@@ -78,5 +84,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TObjectPtr<UCharacterAbilities> CharacterAbilities;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")
+	TObjectPtr<UCharacterWeapons> CharacterWeapons;
 };
 
