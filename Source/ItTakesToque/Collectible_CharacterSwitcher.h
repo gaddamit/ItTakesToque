@@ -6,6 +6,7 @@
 #include "Collectible.h"
 #include "Components/CharacterSwitcher.h"
 #include "Components/CharacterAbilities.h"
+#include "Components/CharacterWeapons.h"
 #include "Collectible_CharacterSwitcher.generated.h"
 
 /**
@@ -23,7 +24,8 @@ class ITTAKESTOQUE_API ACollectible_CharacterSwitcher : public ACollectible
 	class UCharacterSwitcher* CharacterSwitcher = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilites")
 	class UCharacterAbilities* CharacterAbilities = nullptr;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
+	class UCharacterWeapons* CharacterWeapons = nullptr;
 	protected:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
 };

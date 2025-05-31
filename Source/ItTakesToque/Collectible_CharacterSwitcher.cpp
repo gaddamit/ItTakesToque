@@ -9,6 +9,7 @@ ACollectible_CharacterSwitcher::ACollectible_CharacterSwitcher()
     // Initialize the CharacterSwitcher and CharacterAbilities components
     CharacterSwitcher = CreateDefaultSubobject<UCharacterSwitcher>(TEXT("CharacterSwitcher"));
     CharacterAbilities = CreateDefaultSubobject<UCharacterAbilities>(TEXT("CharacterAbilities"));
+    CharacterWeapons = CreateDefaultSubobject<UCharacterWeapons>(TEXT("CharacterWeapons"));
 }
 
 void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
