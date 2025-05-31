@@ -23,7 +23,7 @@ void ACollectible::BeginPlay()
 	if (CollectibleMesh)
 	{
 		CollectibleMesh->OnComponentBeginOverlap.AddDynamic(this, &ACollectible::OnOverlapBegin);
-
+		CollectibleMesh->OnComponentEndOverlap.AddDynamic(this, &ACollectible::OnOverlapEnd);
 	}
 	else
 	{
@@ -51,5 +51,13 @@ void ACollectible::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 		{
 			CollectibleComponent->OnCollect(OtherActor);
 		}
+	}
+}
+
+void ACollectible::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlap end with %s"), *OtherActor->GetName());
 	}
 }
