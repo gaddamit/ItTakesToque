@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Components/My2AbilitySystemComponent.h"
+#include "CharacterAttributeSet.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -63,6 +64,8 @@ void AItTakesToqueCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CharacterWeapons = FindComponentByClass<UCharacterWeapons>();
+
+	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s"), *GetNameSafe(this));
 }
 
 void AItTakesToqueCharacter::BindAbilities()
@@ -120,6 +123,17 @@ void AItTakesToqueCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 			AbilitySystemComponent = Cast<UMy2AbilitySystemComponent>(ASC);
 			AbilitySystemComponent->InitAbilityActorInfo(this, this);
 			AbilitySystemComponent->SetInputComponent(InputComponent);
+			UE_LOG(LogTemplateCharacter, Log, TEXT("Found an Ability System Component!"));
+
+			CharacterAttributeSet = AbilitySystemComponent->GetSet<UCharacterAttributeSet>();
+			if (CharacterAttributeSet)
+			{
+				UE_LOG(LogTemplateCharacter, Log, TEXT("Found a Character Attribute Set!"));
+			}
+			else
+			{
+				UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find a Character Attribute Set!"));
+			}
 		}
 		else
 		{

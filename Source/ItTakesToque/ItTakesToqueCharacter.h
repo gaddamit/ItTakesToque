@@ -9,8 +9,8 @@
 #include "Components/CharacterSwitcher.h"
 #include "Components/CharacterAbilities.h"
 #include "Components/CharacterWeapons.h"
-#include "WeaponInterface.h"
 #include "GameplayTagAssetInterface.h"
+#include "CharacterAttributeSet.h"
 #include "ItTakesToqueCharacter.generated.h"
 
 class USpringArmComponent;
@@ -52,6 +52,9 @@ public:
 	virtual class UCharacterAbilities* GetCharacterAbilities() const;
 
 	virtual class UCharacterWeapons* GetCharacterWeapons() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 protected:
 	void BeginPlay();
 	/** Called for movement input */
@@ -63,8 +66,6 @@ protected:
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 private:
 	void BindAbilities();
 
@@ -87,5 +88,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")
 	TObjectPtr<UCharacterWeapons> CharacterWeapons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes", meta= (AllowPrivateAccess = "true"))
+	const class UCharacterAttributeSet* CharacterAttributeSet;
 };
 
