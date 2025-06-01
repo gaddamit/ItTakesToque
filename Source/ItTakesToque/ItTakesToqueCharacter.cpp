@@ -40,6 +40,9 @@ AItTakesToqueCharacter::AItTakesToqueCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+
+	CharacterAttributeSet = CreateDefaultSubobject<UCharacterAttributeSet>(TEXT("CharacterAttributeSet"));
+	UE_LOG(LogTemplateCharacter, Log, TEXT("Character Attribute Set created for %s"), *GetNameSafe(this));
 }
 
 
@@ -108,32 +111,66 @@ void AItTakesToqueCharacter::NotifyControllerChanged()
 	}
 }
 
+void AItTakesToqueCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	UE_LOG(LogTemplateCharacter, Log, TEXT("PostInitializeComponents for %s"), *GetNameSafe(this));
+
+	UObject* ASC = FindComponentByClass<UMy2AbilitySystemComponent>();
+	if(ASC)
+	{
+		AbilitySystemComponent = Cast<UMy2AbilitySystemComponent>(ASC);
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		UE_LOG(LogTemplateCharacter, Log, TEXT("Found an Ability System Component in %s"), *GetNameSafe(this));
+	}
+	else
+	{
+		UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find an Ability System Component in %s"), *GetNameSafe(this));
+	}
+
+	if(IsValid(AbilitySystemComponent))
+	{
+		// Register the Character Attribute Set
+		CharacterAttributeSet = AbilitySystemComponent->GetSet<UCharacterAttributeSet>();
+		if (CharacterAttributeSet)
+		{
+			if(DefaultAttributeEffect)
+			{
+				// Apply the default attribute effect to the character
+				FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+				EffectContext.AddSourceObject(this);
+				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1, EffectContext);
+				if (SpecHandle.IsValid())
+				{
+					AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+					UE_LOG(LogTemplateCharacter, Log, TEXT("Applied Default Attribute Effect to %s"), *GetNameSafe(this));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemplateCharacter, Error, TEXT("Default Attribute Effect is not set!"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to initialize Character Attribute Set!"));
+		}
+	}
+}
+
 void AItTakesToqueCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	UE_LOG(LogTemplateCharacter, Log, TEXT("Setting up player input component for %s"), *GetNameSafe(this));
 	// Set up action bindings
 	InputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (InputComponent) {
 		// Moving
 		InputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AItTakesToqueCharacter::Move);
 		
-		UObject* ASC = FindComponentByClass<UMy2AbilitySystemComponent>();
-		if(ASC)
+		if(IsValid(AbilitySystemComponent))
 		{
-			AbilitySystemComponent = Cast<UMy2AbilitySystemComponent>(ASC);
-			AbilitySystemComponent->InitAbilityActorInfo(this, this);
 			AbilitySystemComponent->SetInputComponent(InputComponent);
-			UE_LOG(LogTemplateCharacter, Log, TEXT("Found an Ability System Component!"));
-
-			CharacterAttributeSet = AbilitySystemComponent->GetSet<UCharacterAttributeSet>();
-			if (CharacterAttributeSet)
-			{
-				UE_LOG(LogTemplateCharacter, Log, TEXT("Found a Character Attribute Set!"));
-			}
-			else
-			{
-				UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find a Character Attribute Set!"));
-			}
 		}
 		else
 		{

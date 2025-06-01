@@ -66,6 +66,7 @@ protected:
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void PostInitializeComponents() override;
 private:
 	void BindAbilities();
 
@@ -91,5 +92,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes", meta= (AllowPrivateAccess = "true"))
 	const class UCharacterAttributeSet* CharacterAttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
 };
 
