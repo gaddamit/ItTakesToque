@@ -46,5 +46,7 @@ void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* Overlap
 		{
 			CollectibleComponent->OnCollect(OtherActor);
 		}
+
+        OverlapEffects(OtherActor);
 	}
 }

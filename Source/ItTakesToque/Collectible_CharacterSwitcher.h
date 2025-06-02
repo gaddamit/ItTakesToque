@@ -28,4 +28,7 @@ class ITTAKESTOQUE_API ACollectible_CharacterSwitcher : public ACollectible
 	class UCharacterWeapons* CharacterWeapons = nullptr;
 	protected:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
+    void OverlapEffects(AActor* OtherActor);
 };
