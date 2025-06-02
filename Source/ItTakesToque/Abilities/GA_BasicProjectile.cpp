@@ -4,6 +4,8 @@
 #include "GA_BasicProjectile.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "../ItTakesToqueCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 UGA_BasicProjectile::UGA_BasicProjectile()
 {
@@ -28,9 +30,50 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         UE_LOG(LogTemp, Warning, TEXT("Projectile Class is not set"));
         return;
     }
+
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItTakesToqueCharacter::StaticClass(), FoundActors);
+
+    AItTakesToqueCharacter* ClosestEnemy = nullptr;
+    float ClosestDistance = FLT_MAX;
+    for (AActor* Actor : FoundActors)
+    {
+        AItTakesToqueCharacter* Enemy = Cast<AItTakesToqueCharacter>(Actor);
+        if (Enemy && Enemy->CharacterType != ECharacterType::UNDEAD)
+        {
+            continue;
+        }
+
+        if(Enemy->CharacterAttributeSet->Health.GetCurrentValue() <= 0.0f)
+        {
+            // Skip dead enemies
+            continue;
+        }
+
+        // Find closest enemy
+        FVector EnemyLocation = Enemy->GetActorLocation();
+        FVector AvatarLocation = AvatarActor->GetActorLocation();
+        float DistanceToEnemy = FVector::Dist(AvatarLocation, EnemyLocation);
+        if(DistanceToEnemy < ClosestDistance)
+        {
+            ClosestDistance = DistanceToEnemy;
+            ClosestEnemy = Enemy;
+        }
+    }
+
     FTransform SpawnTransform = AvatarActor->GetTransform();
-    SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 100.0f); // Adjust spawn location
-    SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
+    if(IsValid(ClosestEnemy))
+    {
+        FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
+        AvatarActor->SetActorRotation(DirectionToEnemy.Rotation()); // Rotate towards the closest enemy
+        SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
+        SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
+    }
+    else
+    {
+        SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
+        SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
+    }
     AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
     if(!SpawnedProjectile)
     {
