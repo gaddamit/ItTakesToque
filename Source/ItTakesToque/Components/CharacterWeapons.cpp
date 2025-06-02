@@ -52,6 +52,26 @@ void UCharacterWeapons::OnCollect(AActor* Collector)
     UE_LOG(LogTemp, Warning, TEXT("Equipping weapons for %s"), *PlayerCharacter->GetName());
     UE_LOG(LogTemp, Warning, TEXT("Weapons count: %d"), Weapons.Num());
 
+    UE_LOG(LogTemp, Warning, TEXT("EquippedWeapons count: %d"), CW->EquippedWeapons.Num());
+
+    for (const auto& WeaponPair : CW->EquippedWeapons)
+    {
+        FString SocketName = WeaponPair.Key;
+        AWeapon* EquippedWeapon = WeaponPair.Value;
+
+        if (EquippedWeapon)
+        {
+            EquippedWeapon->Destroy();
+            UE_LOG(LogTemp, Warning, TEXT("Removed weapon from socket %s"), *SocketName);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Equipped weapon is not valid for socket %s"), *SocketName);
+        }
+    }
+
+    CW->EquippedWeapons.Empty();
+
     for (const auto& WeaponPair : Weapons)
     {
         FString SocketName = WeaponPair.Key;
