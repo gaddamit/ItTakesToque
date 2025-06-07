@@ -73,6 +73,8 @@ void UCharacterAbilities::OnCollect(AActor* Collector)
 			FGameplayAbilitySpecHandle AbilityHandle = ASC->GiveAbility(FGameplayAbilitySpec(Ability, 1, INDEX_NONE, PlayerCharacter));
 			// Bind the ability to the input action
 			ASC->SetInputBinding(InputAction, AbilityHandle);
+
+			CA->Abilities[InputAction] = Ability; // Store the ability in the CharacterAbilities component
 			// Log the binding for debugging purposes
 			UE_LOG(LogTemp, Warning, TEXT("Bound ability %s to input action %s"), *GetNameSafe(Ability), *GetNameSafe(InputAction));
 		}

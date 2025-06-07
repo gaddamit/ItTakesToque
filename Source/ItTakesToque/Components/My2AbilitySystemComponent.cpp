@@ -168,6 +168,8 @@ void UMy2AbilitySystemComponent::RemoveEntry(UInputAction* InputAction)
 			if (AbilitySpec && AbilitySpec->InputID == Bindings->InputID)
 			{
 				AbilitySpec->InputID = InvalidInputID;
+				ClearAbility(AbilityHandle);
+				UE_LOG(LogTemp, Warning, TEXT("Cleared ability with handle %s from input action %s"), *AbilityHandle.ToString(), *GetNameSafe(InputAction));
 			}
 		}
 
