@@ -7,6 +7,9 @@
 #include "../Weapon.h"
 #include "CharacterWeapons.generated.h"
 
+class AItTakesToqueCharacter;
+
+DECLARE_LOG_CATEGORY_EXTERN(LogWeapons, Log, All);
 /**
  * 
  */
@@ -23,10 +26,13 @@ class ITTAKESTOQUE_API UCharacterWeapons : public UCollectibleComponent
 	protected:
 		// Called when the game starts
 		virtual void BeginPlay() override;
-
 	public:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
 		TMap<FString, TSubclassOf<class AWeapon>> Weapons;
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
 		TMap<FString, AWeapon*> EquippedWeapons;
+	public:
+		/** Function to equip a weapon */
+		UFUNCTION(BlueprintCallable, Category = "Weapons")
+		void UpdateWeapons(AItTakesToqueCharacter* PlayerCharacter, bool bForceUpdate = false);
 };
