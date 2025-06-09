@@ -28,7 +28,7 @@ void ALevelCamera::InitializeCamera()
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("PlayerController found"));
-        PlayerController1->SetViewTargetWithBlend(this, 0.5f);
+        //PlayerController1->SetViewTargetWithBlend(this, 0.5f);
 
         Player1 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
         Player2 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 1);
@@ -41,7 +41,7 @@ void ALevelCamera::InitializeCamera()
         else
         {
             UE_LOG(LogTemp, Warning, TEXT("Player found"));
-            PlayerController1->SetViewTargetWithBlend(this, 0.5f);
+            PlayerController1->SetViewTargetWithBlend(this, 0.0f);
         }
     }
 }
@@ -50,14 +50,37 @@ void ALevelCamera::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if(!Player1 || !Player2)
+    if (!IsValid(Player1) && !IsValid(Player2))
     {
         UE_LOG(LogTemp, Warning, TEXT("Players not found"));
         return;
     }
 
-    FVector Player1Location = Player1->GetActorLocation();
-    FVector Player2Location = Player2->GetActorLocation();
+    FVector Player1Location = FVector::ZeroVector;
+    FVector Player2Location = FVector::ZeroVector;
+
+    if (IsValid(Player1) && IsValid(Player2))
+    {
+        Player1Location = Player1->GetActorLocation();
+        Player2Location = Player2->GetActorLocation();
+    }
+    else
+    {
+        if(!IsValid(Player1))
+        {
+            APlayerController* PlayerController1 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+            PlayerController1->SetViewTarget(this);
+            
+            Player1 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+        }
+        if(!IsValid(Player2))
+        {
+            APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+            Player2 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 1);
+        }
+
+        Player1Location = Player2Location = Player1 ? Player1->GetActorLocation(): Player2->GetActorLocation();
+    }
 
     FVector MidPoint = (Player1Location + Player2Location) / 2.0f;
     float Distance = FVector::Distance(Player1Location, Player2Location);
