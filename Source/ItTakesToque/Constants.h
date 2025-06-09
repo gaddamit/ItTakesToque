@@ -6,7 +6,7 @@ enum class ECharacterType : uint8
 {
 	NONE		UMETA(DisplayName = "None"),
     KNIGHT      UMETA(DisplayName = "Knight"),
-    BARBARIAN	UMETA(DisplayName = "Barabarian"),
+    BARBARIAN	UMETA(DisplayName = "Barbarian"),
     ROGUE		UMETA(DisplayName = "Rogue"),
 	MAGE		UMETA(DisplayName = "Mage"),
     UNDEAD      UMETA(DisplayName = "Undead"),
