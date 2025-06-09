@@ -66,8 +66,6 @@ void AItTakesToqueCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	CharacterWeapons = FindComponentByClass<UCharacterWeapons>();
-
 	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s"), *GetNameSafe(this));
 }
 
@@ -116,6 +114,15 @@ void AItTakesToqueCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 	UE_LOG(LogTemplateCharacter, Log, TEXT("PostInitializeComponents for %s"), *GetNameSafe(this));
 
+	// Initialize the Ability System Component
+	UpdateAbilities();
+	// Initialize the Weapon Component
+	UpdateWeapons();
+}
+
+void AItTakesToqueCharacter::UpdateAbilities()
+{
+
 	UObject* ASC = FindComponentByClass<UMy2AbilitySystemComponent>();
 	if(ASC)
 	{
@@ -155,6 +162,21 @@ void AItTakesToqueCharacter::PostInitializeComponents()
 		{
 			UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to initialize Character Attribute Set!"));
 		}
+	}
+}
+
+void AItTakesToqueCharacter::UpdateWeapons()
+{
+	UObject* Weapons = FindComponentByClass<UCharacterWeapons>();
+	if(Weapons)
+	{
+		CharacterWeapons = Cast<UCharacterWeapons>(Weapons);
+		UE_LOG(LogTemplateCharacter, Log, TEXT("Found a Character Weapons component in %s"), *GetNameSafe(this));
+		CharacterWeapons->UpdateWeapons(this);
+	}
+	else
+	{
+		UE_LOG(LogTemplateCharacter, Error, TEXT("Failed to find a Character Weapons component in %s"), *GetNameSafe(this));
 	}
 }
 

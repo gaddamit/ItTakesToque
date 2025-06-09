@@ -69,7 +69,8 @@ protected:
 	virtual void PostInitializeComponents() override;
 private:
 	void BindAbilities();
-
+	void UpdateAbilities();
+	void UpdateWeapons();
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
