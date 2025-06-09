@@ -20,12 +20,17 @@ class ITTAKESTOQUE_API ACollectible_CharacterSwitcher : public ACollectible
 	ACollectible_CharacterSwitcher();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	ECharacterType CharacterType = ECharacterType::NONE;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	FLinearColor CharacterColor = FLinearColor::White;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	class UNiagaraSystem* CharacterSwitchEffect = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	class UCharacterSwitcher* CharacterSwitcher = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilites")
 	class UCharacterAbilities* CharacterAbilities = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
 	class UCharacterWeapons* CharacterWeapons = nullptr;
+
 	protected:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
 
