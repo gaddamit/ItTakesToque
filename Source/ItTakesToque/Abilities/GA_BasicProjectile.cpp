@@ -6,6 +6,11 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "../ItTakesToqueCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "Components/SphereComponent.h"
+#include "../Constants.h"
+
 
 UGA_BasicProjectile::UGA_BasicProjectile()
 {
@@ -24,13 +29,53 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         UE_LOG(LogTemp, Warning, TEXT("Invalid Avatar Actor"));
         return;
     }
-    AActor* AvatarActor = ActorInfo->AvatarActor.Get();
+
     if(!ProjectileClass)
     {
         UE_LOG(LogTemp, Warning, TEXT("Projectile Class is not set"));
         return;
     }
 
+        AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
+    if (!AvatarActor)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Invalid Avatar Actor"));
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
+        return;
+    }
+
+    UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, FName("None"), CharacterAnimation, 1.0f, FName("None"));  
+    if (PlayMontageTask)
+    {
+        PlayMontageTask->OnCompleted.AddDynamic(this, &UGA_BasicProjectile::OnMontageCompleted);
+        PlayMontageTask->ReadyForActivation();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to create PlayMontageAndWait task"));
+    }
+
+    UAbilityTask_WaitGameplayEvent* WaitForEventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Event.ProjectileShoot")));
+    if (WaitForEventTask)
+    {
+        WaitForEventTask->EventReceived.AddDynamic(this, &UGA_BasicProjectile::SpawnProjectile);
+        WaitForEventTask->ReadyForActivation();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to create WaitGameplayEvent task"));
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Basic Projectile Ability Activated"));
+}
+
+void UGA_BasicProjectile::OnMontageCompleted()
+{
+    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
+}
+
+AActor* UGA_BasicProjectile::FindClosestEnemy(const AActor* AvatarActor) const
+{
     TArray<AActor*> FoundActors;
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItTakesToqueCharacter::StaticClass(), FoundActors);
 
@@ -41,6 +86,12 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         AItTakesToqueCharacter* Enemy = Cast<AItTakesToqueCharacter>(Actor);
         if (Enemy && Enemy->CharacterType != ECharacterType::UNDEAD)
         {
+            continue;
+        }
+
+        if(!Enemy->bHasSpawned)
+        {
+            // Skip enemies that have not spawned yet
             continue;
         }
 
@@ -61,7 +112,16 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         }
     }
 
+    return ClosestEnemy;
+}
+
+void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
+{
+    AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
+    AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
+
     FTransform SpawnTransform = AvatarActor->GetTransform();
+
     if(IsValid(ClosestEnemy))
     {
         FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
@@ -74,10 +134,12 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
         SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
     }
+
     AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
     if(!SpawnedProjectile)
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to spawn projectile"));
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
         return;
     }
 
@@ -95,9 +157,16 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
         ProjectileMovement->ProjectileGravityScale = 0.0f; // Set to 1.0f for gravity effect
     }
-    UE_LOG(LogTemp, Warning, TEXT("Basic Projectile Ability Activated"));
 
-    OnAbilityActivated(); // Call the Blueprint event to notify that the ability was activated
+    USphereComponent* CollisionComponent = SpawnedProjectile->FindComponentByClass<USphereComponent>();
+    if(CollisionComponent)
+    {
+        CollisionComponent->SetCollisionResponseToChannel(COLLISION_OBJECT_FRIEND, ECR_Ignore);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Projectile does not have a collision component"));
+    }
 
-    //EndAbility(Handle, ActorInfo, ActivationInfo, true, false); // End the ability after launching the projectile
+    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }

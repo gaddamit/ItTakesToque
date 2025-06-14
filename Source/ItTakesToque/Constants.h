@@ -25,3 +25,6 @@ enum class EAbilityInputID : uint8
     Skill2      UMETA(DisplayName = "Skill2"),
     Skill3      UMETA(DisplayName = "Skill3"),
 };
+
+#define COLLISION_OBJECT_FRIEND ECC_GameTraceChannel1
+#define COLLISION_OBJECT_ENEMY  ECC_GameTraceChannel2

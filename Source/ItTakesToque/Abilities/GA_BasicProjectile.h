@@ -24,6 +24,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	float ProjectileLifetime = 5.0f; // Lifetime of the projectile in seconds
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	UAnimMontage* CharacterAnimation; // Animation to play when the projectile is spawned
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
-    void OnAbilityActivated();
+    void OnAbilityActivated(FTransform SpawnTransform);
+
+	UFUNCTION(BlueprintCallable, Category = "MyEvents")
+	void OnMontageCompleted();
+	UFUNCTION(BlueprintCallable, Category = "MyEvents")
+	void SpawnProjectile(FGameplayEventData Payload);
+
+private:
+	FTransform SpawnTransform;
+	FVector LaunchDirection;
+private:
+	AActor* FindClosestEnemy(const AActor* AvatarActor) const;
 };
