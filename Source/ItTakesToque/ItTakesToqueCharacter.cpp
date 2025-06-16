@@ -74,7 +74,7 @@ void AItTakesToqueCharacter::BindAbilities()
 	UE_LOG(LogTemplateCharacter, Log, TEXT("Binding abilities for %s"), *GetNameSafe(this));
 	if(AbilitySystemComponent && CharacterAbilities)
 	{
-		TMap<TObjectPtr<UInputAction>, TSubclassOf<UGameplayAbility>>& Abilities = CharacterAbilities->Abilities;
+		TMap<TObjectPtr<UInputAction>, TSubclassOf<UGA_Base>>& Abilities = CharacterAbilities->Abilities;
 		// Iterate through the map and bind each ability to the corresponding input action
 		for (const TPair<TObjectPtr<UInputAction>, TSubclassOf<UGameplayAbility>>& Pair : Abilities)
 		{

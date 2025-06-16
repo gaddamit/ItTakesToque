@@ -55,6 +55,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+	void OnAbilitiesSwitched();
 protected:
 	void BeginPlay();
 	/** Called for movement input */
@@ -78,6 +81,11 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	bool bHasSpawned = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	bool bIsAlive = true;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	ECharacterType CharacterType = ECharacterType::KNIGHT;
 
