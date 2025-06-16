@@ -16,16 +16,6 @@ void UCharacterSwitcher::OnCollect(AActor* Collector)
         UE_LOG(LogTemp, Warning, TEXT("Collector is not a valid player character"));
         return;
     }
-
-    // if(PlayerCharacter->CharacterType == CharacterType || PlayerCharacter->CharacterType == ECharacterType::UNDEAD)
-    // {
-    //     UE_LOG(LogTemp, Warning, TEXT("Not switching to %s"), *UEnum::GetValueAsString(PlayerCharacter->CharacterType));
-    //     return;
-    // }
-
-    // // Set the character type
-    // PlayerCharacter->CharacterType = CharacterType;
-    //UE_LOG(LogTemp, Warning, TEXT("Character type set to %s"), *UEnum::GetValueAsString(CharacterType));
     
     // Set the skeletal mesh
     if (SkeletalMeshAsset)
