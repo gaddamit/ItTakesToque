@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "GA_Base.h"
 #include "GA_BasicMelee.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ITTAKESTOQUE_API UGA_BasicMelee : public UGameplayAbility
+class ITTAKESTOQUE_API UGA_BasicMelee : public UGA_Base
 {
 	GENERATED_BODY()
 	

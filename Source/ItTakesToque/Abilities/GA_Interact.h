@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "GA_Base.h"
 #include "GA_Interact.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ITTAKESTOQUE_API UGA_Interact : public UGameplayAbility
+class ITTAKESTOQUE_API UGA_Interact : public UGA_Base
 {
 	GENERATED_BODY()
 	public:

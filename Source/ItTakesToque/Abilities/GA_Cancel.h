@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "GA_Base.h"
 #include "GA_Cancel.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ITTAKESTOQUE_API UGA_Cancel : public UGameplayAbility
+class ITTAKESTOQUE_API UGA_Cancel : public UGA_Base
 {
 	GENERATED_BODY()
 	

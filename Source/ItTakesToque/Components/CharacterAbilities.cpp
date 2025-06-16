@@ -83,4 +83,6 @@ void UCharacterAbilities::OnCollect(AActor* Collector)
 			UE_LOG(LogTemp, Warning, TEXT("Invalid Input Action or Ability for %s"), *GetNameSafe(this));
 		}
 	}
+
+	PlayerCharacter->OnAbilitiesSwitched();
 }

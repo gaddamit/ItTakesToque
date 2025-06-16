@@ -7,6 +7,7 @@
 #include "Components/ActorComponent.h"
 #include "GameFramework/Character.h"
 #include "../Constants.h"
+#include "../Abilities/GA_Base.h"
 #include "CharacterAbilities.generated.h"
 
 class UInputAction;
@@ -29,5 +30,5 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	TMap<TObjectPtr<UInputAction>, TSubclassOf<class UGameplayAbility>> Abilities;
+	TMap<TObjectPtr<UInputAction>, TSubclassOf<class UGA_Base>> Abilities;
 };

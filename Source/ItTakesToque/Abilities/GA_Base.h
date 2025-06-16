@@ -24,5 +24,4 @@ public:
 	// Skill Icon
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	UTexture2D* SkillIcon;
-
 };
