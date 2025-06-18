@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "Components/Image.h"
+#include "NiagaraSystem.h"
 #include "GA_Base.generated.h"
 
 /**
@@ -24,4 +25,11 @@ public:
 	// Skill Icon
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	UTexture2D* SkillIcon;
+
+	// Animation Montage
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
+	UAnimMontage* SkillAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* SkillEffect;
 };
