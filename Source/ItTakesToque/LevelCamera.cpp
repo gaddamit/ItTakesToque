@@ -20,6 +20,10 @@ void ALevelCamera::InitializeCamera()
 {
     APlayerController* PlayerController1 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 1);
+    
+    PlayerController1->bAutoManageActiveCameraTarget = false;
+    PlayerController2->bAutoManageActiveCameraTarget = false;
+
     if(!PlayerController1 || !PlayerController2)
     {
         UE_LOG(LogTemp, Warning, TEXT("PlayerController not found"));
@@ -42,6 +46,7 @@ void ALevelCamera::InitializeCamera()
         {
             UE_LOG(LogTemp, Warning, TEXT("Player found"));
             PlayerController1->SetViewTargetWithBlend(this, 0.0f);
+            PlayerController2->SetViewTargetWithBlend(this, 0.0f);
         }
     }
 }
