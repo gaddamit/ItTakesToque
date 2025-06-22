@@ -125,7 +125,10 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
     if(IsValid(ClosestEnemy))
     {
         FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
-        AvatarActor->SetActorRotation(DirectionToEnemy.Rotation()); // Rotate towards the closest enemy
+        if(IsAutoAimEnabled)
+        {
+            AvatarActor->SetActorRotation(DirectionToEnemy.Rotation()); // Rotate towards the closest enemy
+        }
         SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
         SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
     }
@@ -135,38 +138,58 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
         SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
     }
 
-    AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
-    if(!SpawnedProjectile)
+    for(int i = 0; i < Number; ++i)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn projectile"));
-        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
-        return;
-    }
+        AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+        if(!SpawnedProjectile)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Failed to spawn projectile"));
+            EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
+            return;
+        }
 
-    // Set the projectile's velocity
-    FVector LaunchDirection = AvatarActor->GetActorForwardVector();
-    FVector LaunchVelocity = LaunchDirection * ProjectileSpeed;
+        // Set the projectile's velocity
+        FVector LaunchDirection = AvatarActor->GetActorForwardVector();
+        if(IsHomingEnabled)
+        {
+            LaunchDirection = LaunchDirection.RotateAngleAxis(FMath::RandRange(-90.0f, 90.0f), FVector::UpVector); // Add some random spread
+        }
+        FVector LaunchVelocity = LaunchDirection * ProjectileSpeed;
 
-    // Assuming the projectile has a movement component, set its velocity
-    UProjectileMovementComponent* ProjectileMovement = SpawnedProjectile->FindComponentByClass<UProjectileMovementComponent>();
-    if(ProjectileMovement)
-    {
-        ProjectileMovement->Velocity = LaunchVelocity;
-        ProjectileMovement->InitialSpeed = ProjectileSpeed;
-        ProjectileMovement->MaxSpeed = ProjectileSpeed;
-        ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
-        ProjectileMovement->ProjectileGravityScale = 0.0f; // Set to 1.0f for gravity effect
-    }
+        // Assuming the projectile has a movement component, set its velocity
+        UProjectileMovementComponent* ProjectileMovement = SpawnedProjectile->FindComponentByClass<UProjectileMovementComponent>();
+        if(ProjectileMovement)
+        {
+            ProjectileMovement->Velocity = LaunchVelocity;
+            ProjectileMovement->InitialSpeed = ProjectileSpeed;
+            ProjectileMovement->MaxSpeed = ProjectileSpeed;
+            ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
+            ProjectileMovement->ProjectileGravityScale = 0.0f; // Set to 1.0f for gravity effect
 
-    USphereComponent* CollisionComponent = SpawnedProjectile->FindComponentByClass<USphereComponent>();
-    if(CollisionComponent)
-    {
-        CollisionComponent->SetCollisionResponseToChannel(COLLISION_OBJECT_FRIEND, ECR_Ignore);
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Projectile does not have a collision component"));
+            if(IsHomingEnabled && ClosestEnemy)
+            {
+                ProjectileMovement->HomingTargetComponent = ClosestEnemy->GetRootComponent();
+                ProjectileMovement->bIsHomingProjectile = true;
+                ProjectileMovement->HomingAccelerationMagnitude = 10000.0f; // Adjust as needed
+                ProjectileMovement->bRotationFollowsVelocity = true; // Make the projectile rotate towards the target
+            }
+        }
+
+        USphereComponent* CollisionComponent = SpawnedProjectile->FindComponentByClass<USphereComponent>();
+        if(CollisionComponent)
+        {
+            CollisionComponent->SetCollisionResponseToChannel(COLLISION_OBJECT_FRIEND, ECR_Ignore);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Projectile does not have a collision component"));
+        }
     }
 
     EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
+}
+
+void UGA_BasicProjectile::ShootProjectile(const AActor* AvatarActor, const AActor* ClosestEnemy, float Delay) const
+{
+   
 }

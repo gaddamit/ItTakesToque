@@ -26,6 +26,14 @@ public:
 	float ProjectileLifetime = 5.0f; // Lifetime of the projectile in seconds
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	int Number = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	bool IsAutoAimEnabled = true; // Whether auto-aim is enabled for the projectile)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	bool IsHomingEnabled = false; // Whether homing is enabled for the projectile)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	UAnimMontage* CharacterAnimation; // Animation to play when the projectile is spawned
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
     void OnAbilityActivated(FTransform SpawnTransform);
@@ -40,4 +48,5 @@ private:
 	FVector LaunchDirection;
 private:
 	AActor* FindClosestEnemy(const AActor* AvatarActor) const;
+	void ShootProjectile(const AActor* AvatarActor, const AActor* ClosestEnemy, float Delay) const;
 };
