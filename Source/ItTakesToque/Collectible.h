@@ -30,4 +30,7 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Custom", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* CollectibleMesh;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Custom", meta = (AllowPrivateAccess = "true"))
+	bool bDestroyOnCollect = true;
 };

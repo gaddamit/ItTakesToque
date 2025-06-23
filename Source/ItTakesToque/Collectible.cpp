@@ -51,6 +51,13 @@ void ACollectible::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 		{
 			CollectibleComponent->OnCollect(OtherActor);
 		}
+
+		if(bDestroyOnCollect)
+		{
+			// Destroy the collectible actor
+			Destroy();
+			UE_LOG(LogTemp, Warning, TEXT("Collectible %s destroyed"), *GetName());
+		}
 	}
 }
 

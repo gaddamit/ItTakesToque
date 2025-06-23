@@ -41,13 +41,13 @@ void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* Overlap
 
         Character->CharacterType = CharacterType;
 
-		//get all components of type CollectibleComponent
-		TArray<UCollectibleComponent*> CollectibleComponents;
-		this->GetComponents<UCollectibleComponent>(CollectibleComponents);
-		for (UCollectibleComponent* CollectibleComponent : CollectibleComponents)
-		{
-			CollectibleComponent->OnCollect(OtherActor);
-		}
+		// //get all components of type CollectibleComponent
+		// TArray<UCollectibleComponent*> CollectibleComponents;
+		// this->GetComponents<UCollectibleComponent>(CollectibleComponents);
+		// for (UCollectibleComponent* CollectibleComponent : CollectibleComponents)
+		// {
+		// 	CollectibleComponent->OnCollect(OtherActor);
+		// }
 
         OverlapEffects(OtherActor);
         UNiagaraComponent* Indicator = Character->FindComponentByClass<UNiagaraComponent>();
@@ -74,5 +74,7 @@ void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* Overlap
                 UE_LOG(LogTemp, Warning, TEXT("Failed to spawn CharacterSwitchEffect for %s"), *GetName());
             }
         }
+
+        Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, Hit);
 	}
 }
