@@ -4,11 +4,12 @@
 #include "GA_BasicProjectile.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "../ItTakesToqueCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Components/SphereComponent.h"
+
+#include "../Character/ItTakesToqueCharacter.h"
 #include "../Constants.h"
 
 
@@ -36,7 +37,7 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         return;
     }
 
-        AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
+    AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
     if (!AvatarActor)
     {
         UE_LOG(LogTemp, Warning, TEXT("Invalid Avatar Actor"));
@@ -44,6 +45,16 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         return;
     }
 
+    AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
+    if(IsValid(ClosestEnemy))
+    {
+        FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
+        if(IsAutoAimEnabled)
+        {
+            AvatarActor->SetActorRotation(DirectionToEnemy.Rotation()); // Rotate towards the closest enemy
+        }
+    }
+    
     UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, FName("None"), CharacterAnimation, 1.0f, FName("None"));  
     if (PlayMontageTask)
     {
@@ -122,17 +133,7 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
 
     FTransform SpawnTransform = AvatarActor->GetTransform();
 
-    if(IsValid(ClosestEnemy))
-    {
-        FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
-        if(IsAutoAimEnabled)
-        {
-            AvatarActor->SetActorRotation(DirectionToEnemy.Rotation()); // Rotate towards the closest enemy
-        }
-        SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
-        SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
-    }
-    else
+    //if(IsValid(ClosestEnemy))
     {
         SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
         SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
@@ -170,7 +171,7 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
             {
                 ProjectileMovement->HomingTargetComponent = ClosestEnemy->GetRootComponent();
                 ProjectileMovement->bIsHomingProjectile = true;
-                ProjectileMovement->HomingAccelerationMagnitude = 10000.0f; // Adjust as needed
+                ProjectileMovement->HomingAccelerationMagnitude = 17500.0f; // Adjust as needed
                 ProjectileMovement->bRotationFollowsVelocity = true; // Make the projectile rotate towards the target
             }
         }

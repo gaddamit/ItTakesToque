@@ -16,4 +16,5 @@ void UGA_Base::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FG
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+    CommitAbilityCooldown(Handle, ActorInfo, ActivationInfo, false);
 }
