@@ -10,8 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Components/My2AbilitySystemComponent.h"
+
 #include "CharacterAttributeSet.h"
+#include "../Components/My2AbilitySystemComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -251,6 +252,11 @@ void AItTakesToqueCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AItTakesToqueCharacter::OnLanded(const FHitResult& Result)
+{
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Landed"));	
 }
 
 void AItTakesToqueCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

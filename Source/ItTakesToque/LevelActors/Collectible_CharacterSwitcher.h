@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Collectible.h"
-#include "Components/CharacterSwitcher.h"
-#include "Components/CharacterAbilities.h"
-#include "Components/CharacterWeapons.h"
+#include "../Components/CharacterSwitcher.h"
+#include "../Components/CharacterAbilities.h"
+#include "../Components/CharacterWeapons.h"
 #include "Collectible_CharacterSwitcher.generated.h"
 
 /**

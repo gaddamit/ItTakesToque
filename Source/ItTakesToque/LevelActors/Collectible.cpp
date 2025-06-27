@@ -3,7 +3,8 @@
 
 #include "Collectible.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/CollectibleComponent.h"
+#include "../Components/CollectibleComponent.h"
+#include "ItTakesToque/Character/ItTakesToqueCharacter.h"
 
 // Sets default values
 ACollectible::ACollectible()
@@ -43,6 +44,12 @@ void ACollectible::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
+		AItTakesToqueCharacter* Character = Cast<AItTakesToqueCharacter>(OtherActor);
+		if(Character->CharacterType == ECharacterType::UNDEAD)
+		{
+			return;
+		}
+		
 		UE_LOG(LogTemp, Warning, TEXT("Overlap with %s"), *OtherActor->GetName());
 		//get all components of type CollectibleComponent
 		TArray<UCollectibleComponent*> CollectibleComponents;

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CollectibleComponent.h"
-#include "../Weapon.h"
+#include "../Game/Weapon.h"
 #include "CharacterWeapons.generated.h"
 
 class AItTakesToqueCharacter;

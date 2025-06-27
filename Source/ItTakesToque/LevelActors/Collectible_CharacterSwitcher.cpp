@@ -2,7 +2,7 @@
 
 
 #include "Collectible_CharacterSwitcher.h"
-#include "ItTakesToqueCharacter.h"
+#include "../Character/ItTakesToqueCharacter.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 

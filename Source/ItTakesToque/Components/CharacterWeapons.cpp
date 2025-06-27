@@ -2,8 +2,8 @@
 
 
 #include "CharacterWeapons.h"
-#include "../ItTakesToqueCharacter.h"
-#include "../Weapon.h"
+#include "../Character/ItTakesToqueCharacter.h"
+#include "../Game/Weapon.h"
 
 DEFINE_LOG_CATEGORY(LogWeapons);
 

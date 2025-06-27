@@ -2,7 +2,7 @@
 
 
 #include "CharacterSwitcher.h"
-#include "../ItTakesToqueCharacter.h"
+#include "../Character/ItTakesToqueCharacter.h"
 
 void UCharacterSwitcher::OnCollect(AActor* Collector)
 {

@@ -57,7 +57,7 @@ void ALevelCamera::Tick(float DeltaTime)
 
     if (!IsValid(Player1) && !IsValid(Player2))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Players not found"));
+        //UE_LOG(LogTemp, Warning, TEXT("Players not found"));
         return;
     }
 

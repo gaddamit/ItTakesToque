@@ -2,7 +2,7 @@
 
 
 #include "CharacterAbilities.h"
-#include "../ItTakesToqueCharacter.h"
+#include "../Character/ItTakesToqueCharacter.h"
 #include "My2AbilitySystemComponent.h"
 
 // Sets default values for this component's properties

@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ItTakesToqueGameMode.h"
-#include "ItTakesToqueCharacter.h"
+#include "Character/ItTakesToqueCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AItTakesToqueGameMode::AItTakesToqueGameMode()

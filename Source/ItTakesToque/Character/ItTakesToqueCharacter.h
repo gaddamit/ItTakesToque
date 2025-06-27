@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "Constants.h"
-#include "Components/CharacterSwitcher.h"
-#include "Components/CharacterAbilities.h"
-#include "Components/CharacterWeapons.h"
+#include "../Constants.h"
+#include "../Components/CharacterSwitcher.h"
+#include "../Components/CharacterAbilities.h"
+#include "../Components/CharacterWeapons.h"
 #include "GameplayTagAssetInterface.h"
 #include "CharacterAttributeSet.h"
 #include "ItTakesToqueCharacter.generated.h"
@@ -70,6 +70,7 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
+	virtual void OnLanded(const FHitResult& Result);
 private:
 	void BindAbilities();
 	void UpdateAbilities();
