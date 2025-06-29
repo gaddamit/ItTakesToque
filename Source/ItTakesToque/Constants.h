@@ -26,5 +26,12 @@ enum class EAbilityInputID : uint8
     Skill3      UMETA(DisplayName = "Skill3"),
 };
 
+enum class ETeams : uint8
+{
+	HUMAN UMETA(DisplayName = "Human"),
+	UNDEAD UMETA(DisplayName = "Undead"),
+	NONE = 255 UMETA(DisplayName = "None"),
+};
+
 #define COLLISION_OBJECT_FRIEND ECC_GameTraceChannel1
 #define COLLISION_OBJECT_ENEMY  ECC_GameTraceChannel2

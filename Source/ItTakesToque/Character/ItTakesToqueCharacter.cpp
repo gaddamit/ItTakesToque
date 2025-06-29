@@ -44,8 +44,8 @@ AItTakesToqueCharacter::AItTakesToqueCharacter()
 
 	CharacterAttributeSet = CreateDefaultSubobject<UCharacterAttributeSet>(TEXT("CharacterAttributeSet"));
 	UE_LOG(LogTemplateCharacter, Log, TEXT("Character Attribute Set created for %s"), *GetNameSafe(this));
-}
 
+}
 
 UMy2AbilitySystemComponent* AItTakesToqueCharacter::GetAbilitySystemComponent() const
 {
@@ -66,7 +66,9 @@ void AItTakesToqueCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
+	
+	TeamId = StaticCast<uint>(CharacterType != ECharacterType::UNDEAD ? (ETeams::HUMAN) : ETeams::UNDEAD);
+	
 	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s"), *GetNameSafe(this));
 }
 
@@ -123,7 +125,6 @@ void AItTakesToqueCharacter::PostInitializeComponents()
 
 void AItTakesToqueCharacter::UpdateAbilities()
 {
-
 	UObject* ASC = FindComponentByClass<UMy2AbilitySystemComponent>();
 	if(ASC)
 	{
@@ -151,6 +152,13 @@ void AItTakesToqueCharacter::UpdateAbilities()
 				if (SpecHandle.IsValid())
 				{
 					AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+
+					if(CharacterType != ECharacterType::UNDEAD)
+					{
+						FGameplayTag Alive = FGameplayTag::RequestGameplayTag(FName("Status.Alive"));
+						AbilitySystemComponent->AddLooseGameplayTag(Alive);
+					}
+					
 					UE_LOG(LogTemplateCharacter, Log, TEXT("Applied Default Attribute Effect to %s"), *GetNameSafe(this));
 				}
 			}

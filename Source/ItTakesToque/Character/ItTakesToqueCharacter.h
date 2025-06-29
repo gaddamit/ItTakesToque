@@ -11,6 +11,7 @@
 #include "../Components/CharacterWeapons.h"
 #include "GameplayTagAssetInterface.h"
 #include "CharacterAttributeSet.h"
+#include "GenericTeamAgentInterface.h"
 #include "ItTakesToqueCharacter.generated.h"
 
 class USpringArmComponent;
@@ -23,7 +24,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AItTakesToqueCharacter : public ACharacter, public IGameplayTagAssetInterface
+class AItTakesToqueCharacter : public ACharacter, public IGameplayTagAssetInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -105,5 +106,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
+
+protected:
+	FGenericTeamId TeamId;
+public:
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
+
+	UFUNCTION(BlueprintCallable, Category="Character")
+	void SetGenericTeamId(const FGenericTeamId& NewTeamID) { TeamId = NewTeamID; }
 };
 
