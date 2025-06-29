@@ -79,7 +79,7 @@ void ALevelActorSpawner::SpawnActors() const
 	}
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	
 	for(int i = 0; i < NumberOfActorsToSpawn; ++i)
 	{
@@ -89,7 +89,9 @@ void ALevelActorSpawner::SpawnActors() const
 		AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorsToSpawn[RandomIndex], GetRandomSpawnLocation(), Rotator, SpawnParams);
 		if(SpawnedActor)
 		{
+			#if WITH_EDITOR
 			SpawnedActor->SetFolderPath(FName("Enemies"));
+			#endif
 		}
 	}
 
