@@ -50,13 +50,21 @@ void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* Overlap
 		// }
 
         OverlapEffects(OtherActor);
-        UNiagaraComponent* Indicator = Character->FindComponentByClass<UNiagaraComponent>();
+        UNiagaraComponent* Indicator = Cast<UNiagaraComponent>(Character->FindComponentByTag(UNiagaraComponent::StaticClass(), FName("Indicator")));
         if (!Indicator)
         {
             UE_LOG(LogTemp, Warning, TEXT("NiagaraSystem not found on character %s"), *Character->GetName());
         }
 
         Indicator->SetColorParameter(FName("User.Ring Color"), CharacterColor);
+
+        UNiagaraComponent* Dash = Cast<UNiagaraComponent>(Character->FindComponentByTag(UNiagaraComponent::StaticClass(), FName("Dash")));
+        if (!Indicator)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("NiagaraSystem not found on character %s"), *Character->GetName());
+        }
+
+        Dash->SetColorParameter(FName("User.Linear Color"), CharacterColor);
 
         if(!CharacterSwitchEffect)
         {
