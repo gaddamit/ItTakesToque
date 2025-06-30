@@ -13,6 +13,7 @@
 
 #include "CharacterAttributeSet.h"
 #include "../Components/My2AbilitySystemComponent.h"
+#include "../Game/GI_GameInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -277,4 +278,15 @@ void AItTakesToqueCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagCont
 	{
 		UE_LOG(LogTemplateCharacter, Warning, TEXT("AbilitySystemComponent is null in %s"), *GetNameSafe(this));	
 	}
+}
+
+void AItTakesToqueCharacter::ChangeCharacterType(ECharacterType Type)
+{
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("ChangeCharacterType %d"), int(Type));	
+	CharacterType = Type;
+
+	UGI_GameInstance* GameInstance = Cast<UGI_GameInstance>(GetWorld()->GetGameInstance());
+
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	GameInstance->SetCharacterType(PlayerController->GetLocalPlayer()->GetControllerId(), Type);
 }

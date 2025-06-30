@@ -59,6 +59,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
 	void OnAbilitiesSwitched();
+
+	void ChangeCharacterType(ECharacterType Type);
 protected:
 	void BeginPlay();
 	/** Called for movement input */
