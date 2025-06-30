@@ -39,15 +39,7 @@ void ACollectible_CharacterSwitcher::OnOverlapBegin(UPrimitiveComponent* Overlap
             return; // Character already has this ability, do not apply again
         }
 
-        Character->CharacterType = CharacterType;
-
-		// //get all components of type CollectibleComponent
-		// TArray<UCollectibleComponent*> CollectibleComponents;
-		// this->GetComponents<UCollectibleComponent>(CollectibleComponents);
-		// for (UCollectibleComponent* CollectibleComponent : CollectibleComponents)
-		// {
-		// 	CollectibleComponent->OnCollect(OtherActor);
-		// }
+        Character->ChangeCharacterType(CharacterType);
 
         OverlapEffects(OtherActor);
         UNiagaraComponent* Indicator = Cast<UNiagaraComponent>(Character->FindComponentByTag(UNiagaraComponent::StaticClass(), FName("Indicator")));
