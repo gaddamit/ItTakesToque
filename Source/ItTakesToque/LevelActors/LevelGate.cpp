@@ -45,10 +45,7 @@ void ALevelGate::BeginPlay()
 
 	if(IsActivated)
 	{
-		if(IsValid(GateEffect))
-		{
-			GateEffect->Activate();
-		}
+		Activate();
 	}
 }
 

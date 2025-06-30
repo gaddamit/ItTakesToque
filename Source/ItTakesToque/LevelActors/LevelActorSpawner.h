@@ -33,7 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner")
 	bool bIsLooping = false; // Whether to keep spawning actors in a loop
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
+	bool IsRotationRandom = true;
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Spawner")
 	UStaticMeshComponent* SphereMesh; // Mesh component for the spawner

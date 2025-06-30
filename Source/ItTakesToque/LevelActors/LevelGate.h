@@ -21,6 +21,7 @@ public:
 	// Sets default values for this actor's properties
 	ALevelGate();
 
+	UFUNCTION(BlueprintCallable, Category="Default")
 	virtual void Activate() override;
 protected:
 	// Called when the game starts or when spawned
