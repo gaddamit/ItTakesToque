@@ -59,6 +59,8 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
     if (PlayMontageTask)
     {
         PlayMontageTask->OnCompleted.AddDynamic(this, &UGA_BasicProjectile::OnMontageCompleted);
+        PlayMontageTask->OnInterrupted.AddDynamic(this, &UGA_BasicProjectile::OnMontageCompleted);
+        PlayMontageTask->OnCancelled.AddDynamic(this, &UGA_BasicProjectile::OnMontageCompleted);
         PlayMontageTask->ReadyForActivation();
     }
     else
