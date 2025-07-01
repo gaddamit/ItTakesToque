@@ -65,6 +65,20 @@ void ALevelActorSpawner::Activate()
 	}
 }
 
+void ALevelActorSpawner::Deactivate(bool bShouldDestroy)
+{
+	bEnabled = false;
+	if(SpawnerTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(SpawnerTimerHandle);
+	}
+
+	if(bShouldDestroy)
+	{
+		Destroy();
+	}
+}
+
 void ALevelActorSpawner::SpawnActors() const
 {
 	if(!bEnabled)

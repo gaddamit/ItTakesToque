@@ -47,8 +47,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category="Spawner")
 	virtual void Activate() override; // Implementation of IActivatable interface
 
+	UFUNCTION(BlueprintCallable, Category="Spawner")
+	virtual void Deactivate(bool bShouldDestroy);
+	
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
 	void OnSpawnComplete() const;
 private:
