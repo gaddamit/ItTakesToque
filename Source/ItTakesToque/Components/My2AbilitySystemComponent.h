@@ -32,6 +32,9 @@ class ITTAKESTOQUE_API UMy2AbilitySystemComponent : public UAbilitySystemCompone
 	void SetInputBinding(UInputAction* InputAction, FGameplayAbilitySpecHandle AbilityHandle);
 
 	UFUNCTION(BlueprintCallable, Category = "Enhanced Input Abilities")
+	void FindAbilityFromInputAction(UInputAction* InputAction, FGameplayAbilitySpecHandle& Spec);
+
+	UFUNCTION(BlueprintCallable, Category = "Enhanced Input Abilities")
 	void ClearInputBinding(FGameplayAbilitySpecHandle AbilityHandle);
 
 	UFUNCTION(BlueprintCallable, Category = "Enhanced Input Abilities")

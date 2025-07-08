@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
+#include "ItTakesToque/Constants.h"
 
 namespace EnhancedInputAbilitySystem_Impl
 {
@@ -35,7 +36,6 @@ void UMy2AbilitySystemComponent::SetInputBinding(UInputAction* InputAction, FGam
 	using namespace EnhancedInputAbilitySystem_Impl;
 
 	FGameplayAbilitySpec* BindingAbility = FindAbilitySpec(AbilityHandle);
-
 	if (BindingAbility && BindingAbility->InputID != InvalidInputID)
 	{
 		// This ability is already bound to an input action
@@ -73,8 +73,13 @@ void UMy2AbilitySystemComponent::SetInputBinding(UInputAction* InputAction, FGam
 
 	AbilityInputBinding->BoundAbilitiesStack.Push(AbilityHandle);
 	TryBindAbilityInput(InputAction, *AbilityInputBinding);
+}
 
-	
+void UMy2AbilitySystemComponent::FindAbilityFromInputAction(UInputAction* InputAction, FGameplayAbilitySpecHandle& Spec)
+{
+	FAbilityInputBinding* AbilityInputBinding = MappedAbilities.Find(InputAction);
+	UE_LOG(LogTemp, Warning, TEXT("FindAbilityFromInputAction %d"), AbilityInputBinding->BoundAbilitiesStack.Num());
+	Spec = AbilityInputBinding->BoundAbilitiesStack[0];
 }
 
 void UMy2AbilitySystemComponent::ClearInputBinding(FGameplayAbilitySpecHandle AbilityHandle)
@@ -115,8 +120,6 @@ void UMy2AbilitySystemComponent::ClearInputBinding(FGameplayAbilitySpecHandle Ab
 					RemoveEntry(MappedIterator.Key());
 				}
 				// DO NOT act on `AbilityInputBinding` after here (it could have been removed)
-
-
 				FoundAbility->InputID = InvalidInputID;
 			}
 		}

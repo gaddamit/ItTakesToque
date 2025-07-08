@@ -18,6 +18,25 @@ void UGA_Base::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
     CommitAbilityCooldown(Handle, ActorInfo, ActivationInfo, false);
     OnActivateAbility.Broadcast();
-    
     UE_LOG(LogTemp, Warning, TEXT("OnActivateAbility Broadcast"));
+    
+}
+
+float UGA_Base::GetCooldownDuration()
+{
+    float Duration = 0;
+
+    UGameplayEffect* CooldownGE = GetCooldownGameplayEffect();
+    if (CooldownGE)
+    {
+        const FGameplayEffectModifierMagnitude& DurationMagnitude = CooldownGE->DurationMagnitude;
+
+        if (DurationMagnitude.GetMagnitudeCalculationType() == EGameplayEffectMagnitudeCalculation::ScalableFloat)
+        {
+            DurationMagnitude.GetStaticMagnitudeIfPossible(1, Duration);
+            UE_LOG(LogTemp, Log, TEXT("Cooldown duration (from GE): %f seconds"), Duration);
+        }
+    }
+
+    return Duration;
 }

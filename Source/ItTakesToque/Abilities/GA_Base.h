@@ -22,6 +22,9 @@ public:
 	// Override the ActivateAbility function to implement custom ability logic
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	UFUNCTION(BlueprintCallable, Category="Skill")
+	float GetCooldownDuration();
+public:
 	// Skill Icon
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	UTexture2D* SkillIcon;

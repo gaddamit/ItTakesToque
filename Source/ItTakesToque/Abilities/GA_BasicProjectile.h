@@ -35,8 +35,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	UAnimMontage* CharacterAnimation; // Animation to play when the projectile is spawned
-	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
-    void OnAbilityActivated(FTransform SpawnTransform);
 
 	UFUNCTION(BlueprintCallable, Category = "MyEvents")
 	void OnMontageCompleted();
