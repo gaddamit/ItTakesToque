@@ -17,4 +17,7 @@ void UGA_Base::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FG
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
     CommitAbilityCooldown(Handle, ActorInfo, ActivationInfo, false);
+    OnActivateAbility.Broadcast();
+    
+    UE_LOG(LogTemp, Warning, TEXT("OnActivateAbility Broadcast"));
 }

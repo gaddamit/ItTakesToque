@@ -32,4 +32,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
 	UNiagaraSystem* SkillEffect;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnActivateAbility);
+
+	UPROPERTY(BlueprintAssignable, Category="Events")
+	FOnActivateAbility OnActivateAbility;
 };
