@@ -21,7 +21,7 @@ enum class EAbilityInputID : uint8
     Jump        UMETA(DisplayName = "Jump"),
     Dash        UMETA(DisplayName = "Dash"),
     Interact    UMETA(DisplayName = "Interact"),
-    IA_Skill1      UMETA(DisplayName = "Skill1"),
+    Skill1      UMETA(DisplayName = "Skill1"),
     Skill2      UMETA(DisplayName = "Skill2"),
     Skill3      UMETA(DisplayName = "Skill3"),
 };
