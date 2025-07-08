@@ -1,6 +1,7 @@
 #include "LevelCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
+#include "ItTakesToque/Character/ItTakesToqueCharacter.h"
 
 ALevelCamera::ALevelCamera()
 {
@@ -20,11 +21,16 @@ void ALevelCamera::InitializeCamera()
 {
     APlayerController* PlayerController1 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 1);
-    
-    PlayerController1->bAutoManageActiveCameraTarget = false;
-    PlayerController2->bAutoManageActiveCameraTarget = false;
 
-    if(!PlayerController1 || !PlayerController2)
+    if(PlayerController1)
+    {
+        PlayerController1->bAutoManageActiveCameraTarget = false;
+    }
+    if(PlayerController2)
+    {
+        PlayerController2->bAutoManageActiveCameraTarget = false;
+    }
+    if(!PlayerController1 && !PlayerController2)
     {
         UE_LOG(LogTemp, Warning, TEXT("PlayerController not found"));
         return;
@@ -37,7 +43,7 @@ void ALevelCamera::InitializeCamera()
         Player1 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
         Player2 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 1);
 
-        if(!Player1 || !Player2)
+        if(!Player1 && !Player2)
         {
             UE_LOG(LogTemp, Warning, TEXT("Player not found"));
             return;
@@ -45,8 +51,10 @@ void ALevelCamera::InitializeCamera()
         else
         {
             UE_LOG(LogTemp, Warning, TEXT("Player found"));
-            PlayerController1->SetViewTargetWithBlend(this, 0.0f);
-            PlayerController2->SetViewTargetWithBlend(this, 0.0f);
+            if(PlayerController1)
+                PlayerController1->SetViewTargetWithBlend(this, 0.0f);
+            if(PlayerController2)
+                PlayerController2->SetViewTargetWithBlend(this, 0.0f);
         }
     }
 }
@@ -54,7 +62,7 @@ void ALevelCamera::InitializeCamera()
 void ALevelCamera::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
+    
     if (!IsValid(Player1) && !IsValid(Player2))
     {
         //UE_LOG(LogTemp, Warning, TEXT("Players not found"));
@@ -82,6 +90,14 @@ void ALevelCamera::Tick(float DeltaTime)
         {
             APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
             Player2 = UGameplayStatics::GetPlayerCharacter(GetWorld(), 1);
+
+            if(!Player2)
+            {
+                TArray<AActor*> TaggedActors;
+                UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), AItTakesToqueCharacter::StaticClass(), FName("AIPlayer"), TaggedActors);
+
+                Player2 = Cast<AItTakesToqueCharacter>(TaggedActors[0]);
+            }
         }
 
         Player1Location = Player2Location = Player1 ? Player1->GetActorLocation(): Player2->GetActorLocation();
