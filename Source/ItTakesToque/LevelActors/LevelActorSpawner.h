@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelActorActivatable.h"
 #include "GameFramework/Actor.h"
 #include "../Interfaces/IActivatable.h"
 #include "LevelActorSpawner.generated.h"
 
 UCLASS()
-class ITTAKESTOQUE_API ALevelActorSpawner : public AActor, public IActivatable
+class ITTAKESTOQUE_API ALevelActorSpawner : public ALevelActorActivatable
 {
 	GENERATED_BODY()
 	
@@ -48,8 +49,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category="Spawner")
-	virtual void Activate() override; // Implementation of IActivatable interface
+	void Activate() override; // Implementation of IActivatable interface
 
 	UFUNCTION(BlueprintCallable, Category="Spawner")
 	virtual void Deactivate(bool bShouldDestroy);
