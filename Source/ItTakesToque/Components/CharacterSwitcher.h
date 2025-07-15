@@ -26,6 +26,9 @@ class ITTAKESTOQUE_API UCharacterSwitcher : public UCollectibleComponent
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	USkeletalMesh* SkeletalMeshAsset = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Material")
+	UMaterial* Material = nullptr;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	TSubclassOf<UAnimInstance> NewAnimClass = nullptr;
 };

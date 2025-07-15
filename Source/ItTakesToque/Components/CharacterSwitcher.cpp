@@ -30,4 +30,9 @@ void UCharacterSwitcher::OnCollect(AActor* Collector)
     {
         UE_LOG(LogTemp, Warning, TEXT("Skeletal mesh asset not found"));
     }
+
+    if( Material)
+    {
+        PlayerCharacter->GetMesh()->SetMaterial(0, Material);
+    }
 }
