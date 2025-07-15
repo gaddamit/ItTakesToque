@@ -14,7 +14,10 @@ UCLASS()
 class ITTAKESTOQUE_API UGA_Interact : public UGA_Base
 {
 	GENERATED_BODY()
-	public:
+public:
 	UGA_Interact();
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+private:
+	UFUNCTION(BlueprintCallable, Category = "MyEvents")
+	void OnMontageCompleted();
 };

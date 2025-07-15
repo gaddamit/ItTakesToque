@@ -5,6 +5,7 @@
 #include "../Character/ItTakesToqueCharacter.h"
 #include "ItTakesToque/Components/My2AbilitySystemComponent.h"
 #include "ItTakesToque/Interfaces/IActivatable.h"
+#include "GameplayTagsManager.h"
 
 // Sets default values
 ALevelInteractor::ALevelInteractor()
@@ -77,6 +78,8 @@ void ALevelInteractor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 			if(Ability)
 			{
 				Ability->OnActivateAbility.AddDynamic(this, &ALevelInteractor::Interact);
+				const FGameplayTag InteractTag = UGameplayTagsManager::Get().RequestGameplayTag(FName("Event.CanInteract"));
+				AbilitySystemComponent->AddLooseGameplayTag(InteractTag);
 			}
 			else
 			{
@@ -99,10 +102,18 @@ void ALevelInteractor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent,
 		{
 			return;
 		}
+		UMy2AbilitySystemComponent* AbilitySystemComponent = Character->GetAbilitySystemComponent();
+		if(!AbilitySystemComponent)
+		{
+			return;
+		}
 		
 		if(Ability)
 		{
 			Ability->OnActivateAbility.RemoveDynamic(this, &ALevelInteractor::Interact);
+			
+			const FGameplayTag InteractTag = UGameplayTagsManager::Get().RequestGameplayTag(FName("Event.CanInteract"));
+			AbilitySystemComponent->RemoveLooseGameplayTag(InteractTag);
 		}
 	}
 }
@@ -117,6 +128,8 @@ void ALevelInteractor::Interact()
 			Activatable->Activate();
 		}
 	}
+
+	OnInteract();
 	UE_LOG(LogTemp, Warning, TEXT("Level Interactor: Interact"));
 }
 

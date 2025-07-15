@@ -7,8 +7,10 @@
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "../Interfaces/IInteractable.h"
+#include "../Abilities/GA_Base.h"
 #include "LevelInteractor.generated.h"
 
+class UInputAction;
 class UWidgetComponent;
 UCLASS()
 class ITTAKESTOQUE_API ALevelInteractor : public AActor, public IInteractable
@@ -37,6 +39,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Default")
+	void OnInteract();
+
 private:
 	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
@@ -45,6 +51,7 @@ private:
 
 	UFUNCTION(BlueprintCallable, Category="Default")
 	virtual void Interact() override;
+
 private:
 	UGA_Base* Ability;
 };
