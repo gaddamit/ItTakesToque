@@ -98,6 +98,7 @@ void ALevelActorSpawner::SpawnActors() const
 	
 	for(int i = 0; i < NumberOfActorsToSpawn; ++i)
 	{
+		int tries = 5;
 		int32 RandomIndex = FMath::RandRange(0, range-1);
 		float RandomRotation = IsRotationRandom ? FMath::FRandRange(0.0f, 360.0f) : 180.0f;
 		FRotator Rotator = FRotator(0, RandomRotation, 0);
@@ -105,11 +106,15 @@ void ALevelActorSpawner::SpawnActors() const
 		AActor* SpawnedActor = nullptr;
 		do
 		{
+			tries--;
 			SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorsToSpawn[RandomIndex], GetRandomSpawnLocation(), Rotator, SpawnParams);
-		} while (!SpawnedActor);
+		} while (tries > 0 && !SpawnedActor);
 
 		#if WITH_EDITOR
-		SpawnedActor->SetFolderPath(FName("Enemies"));
+		if(SpawnedActor)
+		{
+			SpawnedActor->SetFolderPath(FName("Enemies"));
+		}
 		#endif
 	}
 
