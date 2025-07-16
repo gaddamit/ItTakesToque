@@ -25,4 +25,8 @@ class ITTAKESTOQUE_API UCharacterAttributeSet : public UAttributeSet
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, Health);
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, MaxHealth);
 };
