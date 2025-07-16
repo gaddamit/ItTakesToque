@@ -133,17 +133,17 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
     AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
     AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
 
-    FTransform SpawnTransform = AvatarActor->GetTransform();
+    FTransform ProjectileTransform = AvatarActor->GetTransform();
 
     //if(IsValid(ClosestEnemy))
     {
-        SpawnTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
-        SpawnTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
+        ProjectileTransform.SetLocation(AvatarActor->GetActorLocation() + AvatarActor->GetActorForwardVector() * 200.0f); // Adjust spawn location
+        ProjectileTransform.SetRotation(AvatarActor->GetActorRotation().Quaternion()); // Set rotation to match the character's rotation
     }
 
     for(int i = 0; i < Number; ++i)
     {
-        AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+        AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, ProjectileTransform);
         if(!SpawnedProjectile)
         {
             UE_LOG(LogTemp, Warning, TEXT("Failed to spawn projectile"));
@@ -152,12 +152,12 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
         }
 
         // Set the projectile's velocity
-        FVector LaunchDirection = AvatarActor->GetActorForwardVector();
+        FVector ProjectileDirection = AvatarActor->GetActorForwardVector();
         if(IsHomingEnabled)
         {
-            LaunchDirection = LaunchDirection.RotateAngleAxis(FMath::RandRange(-90.0f, 90.0f), FVector::UpVector); // Add some random spread
+            ProjectileDirection = ProjectileDirection.RotateAngleAxis(FMath::RandRange(-90.0f, 90.0f), FVector::UpVector); // Add some random spread
         }
-        FVector LaunchVelocity = LaunchDirection * ProjectileSpeed;
+        FVector LaunchVelocity = ProjectileDirection * ProjectileSpeed;
 
         // Assuming the projectile has a movement component, set its velocity
         UProjectileMovementComponent* ProjectileMovement = SpawnedProjectile->FindComponentByClass<UProjectileMovementComponent>();

@@ -68,7 +68,7 @@ void AItTakesToqueCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 	
-	TeamId = StaticCast<uint>(CharacterType != ECharacterType::UNDEAD ? (ETeams::HUMAN) : ETeams::UNDEAD);
+	TeamId = StaticCast<uint32>(CharacterType != ECharacterType::UNDEAD ? (ETeams::HUMAN) : ETeams::UNDEAD);
 	
 	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s"), *GetNameSafe(this));
 }

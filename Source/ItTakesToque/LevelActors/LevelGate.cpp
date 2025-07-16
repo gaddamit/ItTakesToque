@@ -15,7 +15,7 @@ ALevelGate::ALevelGate()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	USceneComponent* RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root")); // Or use any other component as root
+	USceneComponent* LevelGateRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Root")); // Or use any other component as root
 
 	
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
@@ -25,10 +25,10 @@ ALevelGate::ALevelGate()
 	SphereCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	SphereCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	SphereCollision->SetGenerateOverlapEvents(true);
-	SphereCollision->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	SphereCollision->AttachToComponent(LevelGateRoot, FAttachmentTransformRules::KeepRelativeTransform);
 
 	GateEffect= CreateDefaultSubobject<UNiagaraComponent>(TEXT("FX"));
-	GateEffect->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	GateEffect->AttachToComponent(LevelGateRoot, FAttachmentTransformRules::KeepRelativeTransform);
 	//GateEffect->SetAutoActivate(false);
 	
 }
