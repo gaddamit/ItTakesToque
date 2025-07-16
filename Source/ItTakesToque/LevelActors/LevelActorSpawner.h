@@ -9,7 +9,7 @@
 #include "LevelActorSpawner.generated.h"
 
 UCLASS()
-class ITTAKESTOQUE_API ALevelActorSpawner : public ALevelActorActivatable
+class ITTAKESTOQUE_API ALevelActorSpawner : public AActor, public IActivatable
 {
 	GENERATED_BODY()
 	
@@ -27,10 +27,10 @@ public:
 	int32 NumberOfActorsToSpawn = 1; // Number of actors to spawn at once
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner")
-	float SpawnInterval = 1.0f; // Time interval between spawns in seconds
+	float SpawnStart = 0; // Whether to spawn actors when the game starts
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner")
-	bool bSpawnOnStart = true; // Whether to spawn actors when the game starts
+	float SpawnInterval = 1.0f; // Time interval between spawns in seconds
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner")
 	bool bIsLooping = false; // Whether to keep spawning actors in a loop
@@ -49,8 +49,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Activate() override; // Implementation of IActivatable interface
-
+	UFUNCTION(BlueprintCallable, Category="Spawner")
+	void Activate() override;
+	
 	UFUNCTION(BlueprintCallable, Category="Spawner")
 	virtual void Deactivate(bool bShouldDestroy);
 	
@@ -58,6 +59,7 @@ public:
 	void OnSpawnComplete() const;
 private:
 	FTimerHandle SpawnerTimerHandle;
+	
 	void SpawnActors() const;
 	FVector GetRandomSpawnLocation() const; // Helper function to get a random spawn location within the spawner's bounds
 };

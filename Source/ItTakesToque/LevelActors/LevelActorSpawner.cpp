@@ -26,9 +26,13 @@ void ALevelActorSpawner::BeginPlay()
 	Super::BeginPlay();
 	if(bEnabled)
 	{
-		if(bSpawnOnStart)
+		if(SpawnStart)
 		{
 			SpawnActors();
+			if(bIsLooping)
+			{
+				GetWorld()->GetTimerManager().SetTimer(SpawnerTimerHandle, this, &ALevelActorSpawner::SpawnActors, SpawnInterval, bIsLooping);
+			}
 		}
 		if(bIsLooping)
 		{
@@ -47,22 +51,19 @@ void ALevelActorSpawner::Tick(float DeltaTime)
 
 void ALevelActorSpawner::Activate()
 {
-	bEnabled = true;
-	
-	if(bSpawnOnStart)
+	if(bEnabled)
 	{
-		SpawnActors();
+		return;
 	}
+	
+	bEnabled = true;
 	
 	if(SpawnerTimerHandle.IsValid())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(SpawnerTimerHandle);
 	}
 
-	if(bIsLooping)
-	{
-		GetWorld()->GetTimerManager().SetTimer(SpawnerTimerHandle, this, &ALevelActorSpawner::SpawnActors, SpawnInterval, bIsLooping);
-	}
+	GetWorld()->GetTimerManager().SetTimer(SpawnerTimerHandle, this, &ALevelActorSpawner::SpawnActors, SpawnInterval, bIsLooping, SpawnStart);
 }
 
 void ALevelActorSpawner::Deactivate(bool bShouldDestroy)

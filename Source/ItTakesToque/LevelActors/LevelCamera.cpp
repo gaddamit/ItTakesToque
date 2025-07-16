@@ -94,9 +94,9 @@ void ALevelCamera::Tick(float DeltaTime)
             if(!Player2)
             {
                 TArray<AActor*> TaggedActors;
-                UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), AItTakesToqueCharacter::StaticClass(), FName("AIPlayer"), TaggedActors);
+                //UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), AItTakesToqueCharacter::StaticClass(), FName("AIPlayer"), TaggedActors);
 
-                Player2 = Cast<AItTakesToqueCharacter>(TaggedActors[0]);
+                //Player2 = Cast<AItTakesToqueCharacter>(TaggedActors[0]);
             }
         }
 
