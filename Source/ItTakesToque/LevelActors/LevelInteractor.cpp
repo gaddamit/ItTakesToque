@@ -51,6 +51,12 @@ void ALevelInteractor::Tick(float DeltaTime)
 void ALevelInteractor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Level Interactor: OnBeginOverlap"));
+
+	if(InteractOnce && HasInteracted)
+	{
+		return;
+	}
+	
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
 		AItTakesToqueCharacter* Character = Cast<AItTakesToqueCharacter>(OtherActor);
@@ -129,6 +135,7 @@ void ALevelInteractor::Interact()
 		}
 	}
 
+	HasInteracted = true;
 	OnInteract();
 	UE_LOG(LogTemp, Warning, TEXT("Level Interactor: Interact"));
 }

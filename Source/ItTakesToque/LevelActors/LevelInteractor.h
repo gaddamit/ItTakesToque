@@ -32,6 +32,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Default")
 	UInputAction* InputAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
+	bool InteractOnce = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -53,5 +56,6 @@ private:
 	virtual void Interact() override;
 
 private:
+	bool HasInteracted = false;
 	UGA_Base* Ability;
 };
