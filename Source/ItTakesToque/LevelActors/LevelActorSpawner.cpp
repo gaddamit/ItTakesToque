@@ -3,6 +3,7 @@
 
 #include "LevelActorSpawner.h"
 #include "NavigationSystem.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ALevelActorSpawner::ALevelActorSpawner()
@@ -123,12 +124,14 @@ void ALevelActorSpawner::SpawnActors() const
 
 FVector ALevelActorSpawner::GetRandomSpawnLocation() const
 {
-    FVector Location = GetActorLocation() + FVector(0,0,100.0f);
+    FVector Location = GetActorLocation() + FVector(0,0,50.0f);
     float Scale = GetActorScale3D().X;
 	FNavLocation RandomLocation;
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-	if(NavSystem && NavSystem->GetRandomReachablePointInRadius(Location, Scale * 50.0f, RandomLocation))
+	//USphereComponent* Sphere = Cast<USphereComponent>(SphereMesh);
+	if(NavSystem && NavSystem->GetRandomReachablePointInRadius(Location, Scale, RandomLocation))
 	{
+		RandomLocation.Location.Z = abs(RandomLocation.Location.Z);
 		return RandomLocation.Location;
 	}
 
