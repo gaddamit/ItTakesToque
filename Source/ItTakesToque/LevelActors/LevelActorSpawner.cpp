@@ -101,7 +101,7 @@ void ALevelActorSpawner::SpawnActors() const
 	{
 		int tries = 5;
 		int32 RandomIndex = FMath::RandRange(0, range-1);
-		float RandomRotation = IsRotationRandom ? FMath::FRandRange(0.0f, 360.0f) : 180.0f;
+		float RandomRotation = IsRotationRandom ? FMath::FRandRange(0.0f, 360.0f) : GetActorRotation().Yaw;
 		FRotator Rotator = FRotator(0, RandomRotation, 0);
 
 		AActor* SpawnedActor = nullptr;
