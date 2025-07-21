@@ -46,6 +46,7 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
     }
 
     AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
+
     if(IsValid(ClosestEnemy))
     {
         FVector DirectionToEnemy = (ClosestEnemy->GetActorLocation() - AvatarActor->GetActorLocation()).GetSafeNormal();
@@ -94,10 +95,22 @@ AActor* UGA_BasicProjectile::FindClosestEnemy(const AActor* AvatarActor) const
 
     AItTakesToqueCharacter* ClosestEnemy = nullptr;
     float ClosestDistance = FLT_MAX;
+
+    UE_LOG(LogTemp, Warning, TEXT("Length %d"), FoundActors.Num());
     for (AActor* Actor : FoundActors)
     {
         AItTakesToqueCharacter* Enemy = Cast<AItTakesToqueCharacter>(Actor);
-        if (Enemy && Enemy->CharacterType != ECharacterType::UNDEAD)
+        if(!Enemy)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("No enemy found!"));
+            continue;
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Enemy found!"));
+        }
+        
+        if (Enemy->CharacterType != ECharacterType::UNDEAD)
         {
             continue;
         }
