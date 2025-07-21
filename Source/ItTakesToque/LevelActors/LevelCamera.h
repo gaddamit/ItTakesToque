@@ -16,6 +16,9 @@ class ITTAKESTOQUE_API ALevelCamera : public ACameraActor
 	GENERATED_BODY()
 	public:
 		ALevelCamera();
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
+	bool ShouldFollowPlayers = true;
 	protected:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
@@ -29,8 +32,7 @@ class ITTAKESTOQUE_API ALevelCamera : public ACameraActor
 		float CameraZoomXMultiplier = 1.5f;
 		UPROPERTY(EditAnywhere);
 		float CameraZoomZMultiplier = 1.5f;
-
-
+	
 		UPROPERTY(EditAnywhere);
 		float MinDistanceToAdjust = 1000.0f;
 

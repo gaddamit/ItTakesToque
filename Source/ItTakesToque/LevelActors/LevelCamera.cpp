@@ -62,6 +62,11 @@ void ALevelCamera::InitializeCamera()
 void ALevelCamera::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    if(!ShouldFollowPlayers)
+    {
+        return;
+    }
     
     if (!IsValid(Player1) && !IsValid(Player2))
     {
