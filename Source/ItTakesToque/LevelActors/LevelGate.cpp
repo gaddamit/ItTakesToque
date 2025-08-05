@@ -45,7 +45,12 @@ void ALevelGate::BeginPlay()
 
 	if(IsActivated)
 	{
-		Activate();
+		if(IsValid(GateEffect))
+		{
+			GateEffect->Activate();
+		}
+
+		OnActivate();
 	}
 }
 
@@ -58,12 +63,22 @@ void ALevelGate::Tick(float DeltaTime)
 
 void ALevelGate::Activate()
 {
-	IsActivated = true;
+	if(IsActivated)
+	{
+		return;
+	}
+
 	if(IsValid(GateEffect))
 	{
 		GateEffect->Activate();
 	}
+
 	OnActivate();
+}
+
+void ALevelGate::Deactivate()
+{
+	
 }
 
 void ALevelGate::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

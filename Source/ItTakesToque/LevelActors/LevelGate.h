@@ -23,6 +23,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Default")
 	virtual void Activate() override;
+
+	UFUNCTION(BlueprintCallable, Category="Default")
+	virtual void Deactivate() override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,6 +48,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
 	UNiagaraComponent* GateEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
+	bool ShouldPlayCompleteMusic = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
+	bool ShouldSpawnCollectibles = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
+	bool ShouldShowPlatform = true;
 private:
 	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
