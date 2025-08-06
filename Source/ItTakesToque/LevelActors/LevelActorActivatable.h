@@ -23,6 +23,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintImplementableEvent, Category="Default")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Default")
 	void Activate() override;
+
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Default")
+	void Deactivate() override;
 };
