@@ -32,6 +32,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Default")
 	UInputAction* InputAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
+	bool ShowUI = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
 	bool InteractOnce = false;

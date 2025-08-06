@@ -39,6 +39,8 @@ void ALevelInteractor::BeginPlay()
 	
 	InteractUI->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	InteractUI->SetGenerateOverlapEvents(false);
+
+	InteractUI->SetVisibility(ShowUI);
 }
 
 // Called every frame
