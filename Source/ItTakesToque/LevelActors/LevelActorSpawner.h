@@ -53,7 +53,7 @@ public:
 	void Activate() override;
 	
 	UFUNCTION(BlueprintCallable, Category="Spawner")
-	virtual void Deactivate(bool bShouldDestroy);
+	void Deactivate();
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
 	void OnSpawnComplete() const;

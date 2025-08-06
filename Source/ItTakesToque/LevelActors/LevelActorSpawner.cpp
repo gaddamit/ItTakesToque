@@ -67,7 +67,7 @@ void ALevelActorSpawner::Activate()
 	GetWorld()->GetTimerManager().SetTimer(SpawnerTimerHandle, this, &ALevelActorSpawner::SpawnActors, SpawnInterval, bIsLooping, SpawnStart);
 }
 
-void ALevelActorSpawner::Deactivate(bool bShouldDestroy)
+void ALevelActorSpawner::Deactivate()
 {
 	bEnabled = false;
 	if(SpawnerTimerHandle.IsValid())
@@ -75,7 +75,6 @@ void ALevelActorSpawner::Deactivate(bool bShouldDestroy)
 		GetWorld()->GetTimerManager().ClearTimer(SpawnerTimerHandle);
 	}
 
-	if(bShouldDestroy)
 	{
 		Destroy();
 	}
@@ -129,7 +128,7 @@ FVector ALevelActorSpawner::GetRandomSpawnLocation() const
 	FNavLocation RandomLocation;
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 	//USphereComponent* Sphere = Cast<USphereComponent>(SphereMesh);
-	if(NavSystem && NavSystem->GetRandomReachablePointInRadius(Location, Scale, RandomLocation))
+	if(NavSystem && NavSystem->GetRandomReachablePointInRadius(Location, Scale * 50, RandomLocation))
 	{
 		RandomLocation.Location.Z = abs(RandomLocation.Location.Z);
 		return RandomLocation.Location;
