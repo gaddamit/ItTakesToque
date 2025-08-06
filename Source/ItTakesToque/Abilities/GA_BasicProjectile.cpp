@@ -45,7 +45,17 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         return;
     }
 
-    AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
+    AItTakesToqueCharacter* Character = Cast<AItTakesToqueCharacter>(AvatarActor);
+    AActor* ClosestEnemy = nullptr;
+    if(Character)
+    {
+        TArray<AActor*> PriorityTargets = Character->PriorityTargetActors;
+        ClosestEnemy = FindClosestEnemyFromArray(AvatarActor, PriorityTargets);
+        if(!ClosestEnemy)
+        {
+            ClosestEnemy = FindClosestEnemy(AvatarActor);
+        }
+    }
 
     if(IsValid(ClosestEnemy))
     {
@@ -88,16 +98,11 @@ void UGA_BasicProjectile::OnMontageCompleted()
     EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }
 
-AActor* UGA_BasicProjectile::FindClosestEnemy(const AActor* AvatarActor) const
+AActor* UGA_BasicProjectile::FindClosestEnemyFromArray(const AActor* AvatarActor, const TArray<AActor*> &Targets) const
 {
-    TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItTakesToqueCharacter::StaticClass(), FoundActors);
-
-    AItTakesToqueCharacter* ClosestEnemy = nullptr;
     float ClosestDistance = FLT_MAX;
-
-    UE_LOG(LogTemp, Warning, TEXT("Length %d"), FoundActors.Num());
-    for (AActor* Actor : FoundActors)
+    AActor* ClosestEnemy = nullptr;
+    for (AActor* Actor : Targets)
     {
         AItTakesToqueCharacter* Enemy = Cast<AItTakesToqueCharacter>(Actor);
         if(!Enemy)
@@ -131,21 +136,40 @@ AActor* UGA_BasicProjectile::FindClosestEnemy(const AActor* AvatarActor) const
         FVector EnemyLocation = Enemy->GetActorLocation();
         FVector AvatarLocation = AvatarActor->GetActorLocation();
         float DistanceToEnemy = FVector::Dist(AvatarLocation, EnemyLocation);
+        
         if(DistanceToEnemy < ClosestDistance)
         {
             ClosestDistance = DistanceToEnemy;
             ClosestEnemy = Enemy;
         }
     }
-
     return ClosestEnemy;
+}
+
+AActor* UGA_BasicProjectile::FindClosestEnemy(const AActor* AvatarActor) const
+{
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItTakesToqueCharacter::StaticClass(), FoundActors);
+
+    return FindClosestEnemyFromArray(AvatarActor, FoundActors);
 }
 
 void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
 {
     AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
-    AActor* ClosestEnemy = FindClosestEnemy(AvatarActor);
+    AItTakesToqueCharacter* Character = Cast<AItTakesToqueCharacter>(AvatarActor);
 
+    AActor* ClosestEnemy = nullptr;
+    if(Character)
+    {
+        TArray<AActor*> PriorityTargets = Character->PriorityTargetActors;
+        ClosestEnemy = FindClosestEnemyFromArray(AvatarActor, PriorityTargets);
+        if(!ClosestEnemy)
+        {
+            ClosestEnemy = FindClosestEnemy(AvatarActor);
+        }
+    }
+    
     FTransform ProjectileTransform = AvatarActor->GetTransform();
 
     //if(IsValid(ClosestEnemy))

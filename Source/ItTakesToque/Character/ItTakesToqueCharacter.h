@@ -109,6 +109,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Abilities")
+	TArray<AActor*> PriorityTargetActors;
 protected:
 	FGenericTeamId TeamId;
 public:

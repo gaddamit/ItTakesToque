@@ -46,5 +46,6 @@ private:
 	FVector LaunchDirection;
 private:
 	AActor* FindClosestEnemy(const AActor* AvatarActor) const;
+	AActor* FindClosestEnemyFromArray(const AActor* AvatarActor, const TArray<AActor*> &Targets) const;
 	void ShootProjectile(const AActor* AvatarActor, const AActor* ClosestEnemy, float Delay) const;
 };
