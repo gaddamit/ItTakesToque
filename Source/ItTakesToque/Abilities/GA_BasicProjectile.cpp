@@ -53,7 +53,7 @@ void UGA_BasicProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
         ClosestEnemy = FindClosestEnemyFromArray(AvatarActor, PriorityTargets);
         if(!ClosestEnemy)
         {
-            ClosestEnemy = FindClosestEnemy(AvatarActor);
+            //ClosestEnemy = FindClosestEnemy(AvatarActor);
         }
     }
 
@@ -164,7 +164,7 @@ void UGA_BasicProjectile::SpawnProjectile(FGameplayEventData Payload)
     {
         TArray<AActor*> PriorityTargets = Character->PriorityTargetActors;
         ClosestEnemy = FindClosestEnemyFromArray(AvatarActor, PriorityTargets);
-        if(!ClosestEnemy)
+        if(!ClosestEnemy || IsHomingEnabled)
         {
             ClosestEnemy = FindClosestEnemy(AvatarActor);
         }
