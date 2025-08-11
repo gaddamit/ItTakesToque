@@ -25,6 +25,11 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
 	ECharacterType CharacterType2 = ECharacterType::MAGE;
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Default")
+	void OnLevelStarted();
+	UFUNCTION(BlueprintImplementableEvent, Category="Default")
+	void OnLevelExited(FName LevelNameToLoadlwn);
 public:
 	UFUNCTION(BlueprintCallable, Category="Default")
 	void PrintCharacterType() const;

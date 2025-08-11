@@ -32,4 +32,3 @@ void UGI_GameInstance::PrintCharacterType() const
 	UE_LOG(LogTemp, Warning, TEXT("Player1: Character %d."),CharacterType1);
 	UE_LOG(LogTemp, Warning, TEXT("Player2: Character %d."),CharacterType1);
 }
-

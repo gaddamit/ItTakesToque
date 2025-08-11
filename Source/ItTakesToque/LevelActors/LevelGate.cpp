@@ -5,6 +5,7 @@
 
 #include "NiagaraComponent.h"
 #include "ItTakesToque/Character/ItTakesToqueCharacter.h"
+#include "ItTakesToque/Game/GI_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -73,6 +74,7 @@ void ALevelGate::Activate()
 		GateEffect->Activate();
 	}
 
+	IsActivated = true;
 	OnActivate();
 }
 
@@ -107,8 +109,9 @@ void ALevelGate::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 
 		if(LevelNameToLoad != "")
 		{
-			AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
-			UGameplayStatics::OpenLevel(this, FName(LevelNameToLoad));
+			UGI_GameInstance* GameInstance = Cast<UGI_GameInstance>(GetWorld()->GetGameInstance());
+			GameInstance->OnLevelExited(LevelNameToLoad);
+			OnLevelExited();
 		}
 	}
 }

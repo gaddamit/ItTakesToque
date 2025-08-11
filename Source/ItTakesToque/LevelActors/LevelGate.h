@@ -36,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
 	void OnActivate();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
+	void OnLevelExited();
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Default")
 	USphereComponent* SphereCollision;
