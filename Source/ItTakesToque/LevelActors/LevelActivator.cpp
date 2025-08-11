@@ -50,6 +50,15 @@ void ALevelActivator::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 				Activatable->Activate();
 			}
 		}
+		
+		for (auto Element : ActorsToDeactivate)
+		{
+			if(IsValid(Element) && Element->Implements<UActivatable>())
+			{
+				IActivatable* Activatable = Cast<IActivatable>(Element);
+				Activatable->Deactivate();
+			}
+		}
 
 		SphereCollision->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	}

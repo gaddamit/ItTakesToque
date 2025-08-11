@@ -19,6 +19,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
 	TArray<AActor*> ActorsToActivate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default")
+	TArray<AActor*> ActorsToDeactivate;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
