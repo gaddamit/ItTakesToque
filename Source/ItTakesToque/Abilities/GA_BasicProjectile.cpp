@@ -126,10 +126,13 @@ AActor* UGA_BasicProjectile::FindClosestEnemyFromArray(const AActor* AvatarActor
             continue;
         }
 
-        if(Enemy->CharacterAttributeSet->Health.GetCurrentValue() <= 0.0f)
+        if(Enemy->CharacterAttributeSet)
         {
             // Skip dead enemies
-            continue;
+            if(Enemy->CharacterAttributeSet->Health.GetCurrentValue() <= 0.0f)
+            {
+                continue;
+            }
         }
 
         // Find closest enemy
