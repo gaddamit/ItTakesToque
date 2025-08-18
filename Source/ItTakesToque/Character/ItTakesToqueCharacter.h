@@ -45,6 +45,8 @@ class AItTakesToqueCharacter : public ACharacter, public IGameplayTagAssetInterf
 	UInputAction* MoveAction;
 private:
 	UEnhancedInputComponent* InputComponent;
+
+	bool HasAlreadyFallenOutOfLevel = false;
 public:
 	AItTakesToqueCharacter();
 	/** Returns the current character's ability system component. */
@@ -61,6 +63,9 @@ public:
 	void OnAbilitiesSwitched();
 
 	void ChangeCharacterType(ECharacterType Type);
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Default")
+	void OnFellOutOfWorld();
 protected:
 	void BeginPlay();
 	/** Called for movement input */
@@ -74,6 +79,8 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 	virtual void OnLanded(const FHitResult& Result);
+
+	virtual void FellOutOfWorld(const UDamageType& dmgType) override;
 private:
 	void BindAbilities();
 	void UpdateAbilities();
@@ -112,6 +119,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Abilities")
 	TArray<AActor*> PriorityTargetActors;
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Default")
 	FGenericTeamId TeamId;
 public:
 	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }

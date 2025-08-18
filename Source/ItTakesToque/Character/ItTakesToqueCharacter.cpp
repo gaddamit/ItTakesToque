@@ -70,7 +70,7 @@ void AItTakesToqueCharacter::BeginPlay()
 	
 	TeamId = StaticCast<uint32>(CharacterType != ECharacterType::UNDEAD ? (ETeams::HUMAN) : ETeams::UNDEAD);
 	
-	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s"), *GetNameSafe(this));
+	UE_LOG(LogTemplateCharacter, Log, TEXT("BeginPlay for %s: Tead ID %d"), *GetNameSafe(this), TeamId.GetId());
 }
 
 void AItTakesToqueCharacter::BindAbilities()
@@ -289,4 +289,17 @@ void AItTakesToqueCharacter::ChangeCharacterType(ECharacterType Type)
 
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	GameInstance->SetCharacterType(PlayerController->GetLocalPlayer()->GetControllerId(), Type);
+}
+
+void AItTakesToqueCharacter::FellOutOfWorld(const UDamageType& dmgType)
+{
+	if(HasAlreadyFallenOutOfLevel)
+	{
+		return;
+	}
+
+	HasAlreadyFallenOutOfLevel = true;
+	
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("FellOutOfWorld"));
+	OnFellOutOfWorld();
 }
