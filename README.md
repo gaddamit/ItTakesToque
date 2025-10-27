@@ -10,5 +10,5 @@ Made in Unreal with
 - Enhanced Input
 
 
-## Itch Project Page
+## Itch.io Page
 [Bros Before Bones](https://gaddamit.itch.io/bros-before-bones)
