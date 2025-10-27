@@ -6,7 +6,7 @@
 Bros Before Bones is a capstone project for my Advanced Game Dev course.  
 Made in Unreal with
 - Game Ability System
-- Behavior Trees with Event Query System
+- Behavior Trees with Environment Query System
 - Enhanced Input
 
 
